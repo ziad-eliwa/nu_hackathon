@@ -1,0 +1,40 @@
+{
+  "version": "path-a-v1",
+  "created_at": "2026-04-24T16:48:02.179324+00:00",
+  "thresholds": {
+    "food": 0.7000000000000001,
+    "service": 0.4,
+    "price": 0.5,
+    "cleanliness": 0.6,
+    "delivery": 0.6,
+    "ambiance": 0.5,
+    "app_experience": 0.6,
+    "general": 0.65,
+    "none": 0.24
+  },
+  "fallback_policy": {
+    "none_threshold": 0.5,
+    "general_threshold": 0.55
+  },
+  "sentiment_thresholds": {
+    "negative": 0.45,
+    "neutral": 0.35,
+    "positive": 0.45
+  },
+  "platform_settings": {
+    "google_maps": {
+      "sentiment_thresholds": {
+        "negative": 0.48,
+        "neutral": 0.4,
+        "positive": 0.48
+      }
+    },
+    "play_store": {
+      "sentiment_thresholds": {
+        "negative": 0.42,
+        "neutral": 0.3,
+        "positive": 0.42
+      }
+    }
+  }
+}

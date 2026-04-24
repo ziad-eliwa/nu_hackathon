@@ -7,8 +7,8 @@ from pathlib import Path
 import numpy as np
 from sklearn.metrics import f1_score
 
-from absa.config.taxonomy import ASPECT_TAXONOMY as ASPECTS, ordered_aspects
-from absa.config.settings import DEFAULT_NONE_THRESHOLD, DEFAULT_GENERAL_THRESHOLD
+from absa.config.taxonomy import ASPECT_TAXONOMY as ASPECTS, ordered_aspects, SENTIMENT_LABELS
+from absa.config.settings import DEFAULT_NONE_THRESHOLD, DEFAULT_GENERAL_THRESHOLD, NEUTRAL_BOOST_THRESHOLD
 
 
 def optimize_aspect_thresholds(
@@ -110,4 +110,51 @@ def save_thresholds_config(
     target = Path(path)
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(json.dumps(payload, indent=2, ensure_ascii=True), encoding="utf-8")
+
+
+def optimize_sentiment_thresholds(
+    y_true: np.ndarray,
+    y_prob: np.ndarray,
+    sentiments: tuple[str, ...] = SENTIMENT_LABELS,
+    target_recall: float = 0.5,
+) -> dict[str, float]:
+    """Optimize thresholds for sentiment to improve recall for minority class (neutral)."""
+    if y_true.shape[0] != y_prob.shape[0]:
+        raise ValueError("y_true and y_prob must have the same first dimension")
+    if y_true.shape[1] != len(sentiments) or y_prob.shape[1] != len(sentiments):
+        raise ValueError("y_true and y_prob must have the same second dimension")
+
+    thresholds: dict[str, float] = {}
+    sentiment_to_idx = {s: i for i, s in enumerate(sentiments)}
+    neutral_idx = sentiment_to_idx.get("neutral", 1)
+
+    for idx, sentiment in enumerate(sentiments):
+        true_labels = y_true[:, idx]
+        if true_labels.sum() == 0:
+            thresholds[sentiment] = 0.5
+            continue
+
+        best_threshold = 0.5
+        best_f1 = 0.0
+        candidates = np.linspace(0.2, 0.8, 13)
+
+        for threshold in candidates:
+            pred = (y_prob[:, idx] >= threshold).astype(int)
+            f1 = f1_score(true_labels, pred, zero_division=0)
+            if f1 > best_f1:
+                best_f1 = f1
+                best_threshold = threshold
+
+        if sentiment == "neutral":
+            neutral_candidates = np.linspace(NEUTRAL_BOOST_THRESHOLD, 0.5, 6)
+            for threshold in neutral_candidates:
+                pred = (y_prob[:, idx] >= threshold).astype(int)
+                recall = f1_score(true_labels, pred, zero_division=0, labels=[1], average=None)[0]
+                if recall >= target_recall and pred.sum() > 0:
+                    best_threshold = threshold
+                    break
+
+        thresholds[sentiment] = float(best_threshold)
+
+    return thresholds
 

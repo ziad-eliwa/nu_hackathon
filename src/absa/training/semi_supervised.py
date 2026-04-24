@@ -15,7 +15,7 @@ from absa.data.io import load_labeled_reviews
 from absa.data.schemas import LabeledReviewRecord
 from absa.models.aspect_api import AspectEnsemblePredictor
 from absa.models.aspect_linear import AspectLinearModel
-from absa.models.aspect_transformer import AspectTransformerModel
+from absa.models.aspect_transformer import AspectTransformerModel, TransformerConfig
 from absa.models.sentiment_transformer import AspectConditionedSentimentModel
 from absa.training.calibrate import optimize_aspect_thresholds
 from absa.training.train_aspect import labels_matrix
@@ -436,6 +436,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
-
-from absa.training.train_aspect import TransformerConfig

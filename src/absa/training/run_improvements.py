@@ -29,9 +29,13 @@ class ExperimentConfig:
     sentiment_word_features: int
     sentiment_char_features: int
     sentiment_c: float
+    sentiment_class_weight: str = "balanced"
+    neutral_weight: float = 1.0
+    apply_sentiment_calibration: bool = False
+    platform_calibration: bool = False
 
 
-def _evaluate_validation(validation_csv: str, artifacts_root: Path) -> dict:
+def _evaluate_validation(validation_csv: str, artifacts_root: Path, cfg: ExperimentConfig | None = None) -> dict:
     records = load_labeled_reviews(validation_csv)
     reviews = [
         ReviewInput(
@@ -115,9 +119,14 @@ def _run_one_experiment(
             "word_max_features": cfg.sentiment_word_features,
             "char_max_features": cfg.sentiment_char_features,
             "c": cfg.sentiment_c,
+            "class_weight": cfg.sentiment_class_weight,
+            "neutral_weight": cfg.neutral_weight,
         },
     )
-    metrics = _evaluate_validation(validation_csv, artifact_dir)
+
+    _apply_sentiment_calibration_if_needed(artifact_dir, cfg)
+
+    metrics = _evaluate_validation(validation_csv, artifact_dir, cfg)
     elapsed_sec = time.perf_counter() - start
 
     result = {
@@ -132,6 +141,33 @@ def _run_one_experiment(
         json.dumps(result, indent=2, ensure_ascii=False), encoding="utf-8"
     )
     return result
+
+
+def _apply_sentiment_calibration_if_needed(artifact_dir: Path, cfg: ExperimentConfig) -> None:
+    calibration_path = artifact_dir / "calibration" / "aspect_thresholds.json"
+    if not calibration_path.exists():
+        return
+
+    import json
+    from absa.config.settings import NEUTRAL_BOOST_THRESHOLD
+
+    payload = json.loads(calibration_path.read_text(encoding="utf-8"))
+
+    if cfg.apply_sentiment_calibration:
+        sentiment_thresholds = {
+            "negative": 0.45,
+            "neutral": NEUTRAL_BOOST_THRESHOLD,
+            "positive": 0.45,
+        }
+        payload["sentiment_thresholds"] = sentiment_thresholds
+
+    if cfg.platform_calibration:
+        payload["platform_settings"] = {
+            "google_maps": {"sentiment_thresholds": {"negative": 0.48, "neutral": 0.40, "positive": 0.48}},
+            "play_store": {"sentiment_thresholds": {"negative": 0.42, "neutral": 0.30, "positive": 0.42}},
+        }
+
+    calibration_path.write_text(json.dumps(payload, indent=2, ensure_ascii=True), encoding="utf-8")
 
 
 def _summary_row(result: dict, baseline_tuple_f1: float | None) -> dict:
@@ -191,6 +227,9 @@ def run_all(train_csv: str, validation_csv: str, output_root: Path) -> dict:
             sentiment_word_features=40000,
             sentiment_char_features=30000,
             sentiment_c=2.0,
+            sentiment_class_weight="balanced",
+            apply_sentiment_calibration=False,
+            platform_calibration=False,
         ),
         ExperimentConfig(
             name="exp_02_aggressive_preprocess",
@@ -201,6 +240,9 @@ def run_all(train_csv: str, validation_csv: str, output_root: Path) -> dict:
             sentiment_word_features=40000,
             sentiment_char_features=30000,
             sentiment_c=2.0,
+            sentiment_class_weight="balanced",
+            apply_sentiment_calibration=False,
+            platform_calibration=False,
         ),
         ExperimentConfig(
             name="exp_03_aggressive_high_capacity",
@@ -211,6 +253,9 @@ def run_all(train_csv: str, validation_csv: str, output_root: Path) -> dict:
             sentiment_word_features=50000,
             sentiment_char_features=40000,
             sentiment_c=2.5,
+            sentiment_class_weight="balanced",
+            apply_sentiment_calibration=False,
+            platform_calibration=False,
         ),
         ExperimentConfig(
             name="exp_04_balanced_stronger_regularization",
@@ -221,6 +266,63 @@ def run_all(train_csv: str, validation_csv: str, output_root: Path) -> dict:
             sentiment_word_features=45000,
             sentiment_char_features=35000,
             sentiment_c=3.0,
+            sentiment_class_weight="balanced",
+            apply_sentiment_calibration=False,
+            platform_calibration=False,
+        ),
+        ExperimentConfig(
+            name="exp_05_sentiment_calibration",
+            normalize_profile="aggressive",
+            aspect_word_features=50000,
+            aspect_char_features=40000,
+            aspect_alpha=3e-6,
+            sentiment_word_features=50000,
+            sentiment_char_features=40000,
+            sentiment_c=2.5,
+            sentiment_class_weight="balanced",
+            apply_sentiment_calibration=True,
+            platform_calibration=False,
+        ),
+        ExperimentConfig(
+            name="exp_06_platform_calibration",
+            normalize_profile="aggressive",
+            aspect_word_features=50000,
+            aspect_char_features=40000,
+            aspect_alpha=3e-6,
+            sentiment_word_features=50000,
+            sentiment_char_features=40000,
+            sentiment_c=2.5,
+            sentiment_class_weight="balanced",
+            apply_sentiment_calibration=True,
+            platform_calibration=True,
+        ),
+        ExperimentConfig(
+            name="exp_07_neutral_boost",
+            normalize_profile="aggressive",
+            aspect_word_features=50000,
+            aspect_char_features=40000,
+            aspect_alpha=3e-6,
+            sentiment_word_features=50000,
+            sentiment_char_features=40000,
+            sentiment_c=2.5,
+            sentiment_class_weight="balanced",
+            neutral_weight=2.0,
+            apply_sentiment_calibration=True,
+            platform_calibration=False,
+        ),
+        ExperimentConfig(
+            name="exp_08_neutral_aggressive",
+            normalize_profile="aggressive",
+            aspect_word_features=50000,
+            aspect_char_features=40000,
+            aspect_alpha=3e-6,
+            sentiment_word_features=50000,
+            sentiment_char_features=40000,
+            sentiment_c=2.5,
+            sentiment_class_weight="balanced",
+            neutral_weight=3.0,
+            apply_sentiment_calibration=True,
+            platform_calibration=False,
         ),
     ]
 

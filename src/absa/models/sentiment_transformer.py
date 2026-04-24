@@ -76,6 +76,8 @@ class AspectConditionedSentimentModel:
     random_state: int = 42
     c: float = 2.0
     correct_spelling: bool = False
+    class_weight: str = "balanced"
+    neutral_weight: float = 1.0
 
     _word_vectorizer: TfidfVectorizer | None = field(init=False, default=None)
     _char_vectorizer: TfidfVectorizer | None = field(init=False, default=None)
@@ -97,11 +99,18 @@ class AspectConditionedSentimentModel:
             max_features=self.char_max_features,
             lowercase=False,
         )
+
+        class_weight_value = self.class_weight
+        if self.class_weight != "balanced":
+            class_weight_value = {"negative": 1.0, "neutral": self.neutral_weight, "positive": 1.0}
+        elif self.neutral_weight != 1.0:
+            class_weight_value = {0: 1.0, 1: self.neutral_weight, 2: 1.0}
+
         self._classifier = LogisticRegression(
             C=self.c,
             solver="saga",
             max_iter=1500,
-            class_weight="balanced",
+            class_weight=class_weight_value if class_weight_value != "balanced" else "balanced",
             random_state=self.random_state,
         )
 
@@ -212,6 +221,8 @@ class AspectConditionedSentimentModel:
             "random_state": self.random_state,
             "c": self.c,
             "correct_spelling": self.correct_spelling,
+            "class_weight": self.class_weight,
+            "neutral_weight": self.neutral_weight,
             "single_label": self._single_label,
             "word_vectorizer": self._word_vectorizer,
             "char_vectorizer": self._char_vectorizer,
@@ -231,6 +242,8 @@ class AspectConditionedSentimentModel:
             random_state=int(payload.get("random_state", 42)),
             c=float(payload.get("c", 2.0)),
             correct_spelling=bool(payload.get("correct_spelling", False)),
+            class_weight=str(payload.get("class_weight", "balanced")),
+            neutral_weight=float(payload.get("neutral_weight", 1.0)),
         )
 
         model._single_label = payload.get("single_label")

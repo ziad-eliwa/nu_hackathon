@@ -14,11 +14,11 @@ from typing import Callable, Mapping, Protocol, Sequence
 
 import pandas as pd
 
-from absa.config.settings import InferenceSettings
-from absa.config.taxonomy import ASPECT_TAXONOMY, NONE_ASPECT
+from absa.config.settings import InferenceSettings, NEUTRAL_BOOST_THRESHOLD
+from absa.config.taxonomy import ASPECT_TAXONOMY, NONE_ASPECT, SENTIMENT_LABELS, SENTIMENT_TO_ID
 from absa.data.schemas import PredictionRecord, ReviewInput, review_from_mapping
 from absa.inference.postprocess import finalize_prediction
-from absa.models.sentiment_transformer import AspectConditionedSentimentModel
+from absa.models.sentiment_transformer import AspectConditionedSentimentModel, build_aspect_conditioned_text
 
 
 class AspectProbabilityProvider(Protocol):
@@ -162,18 +162,20 @@ class ABSAPredictor:
 
         outputs: list[PredictionRecord] = []
 
-        for review, aspect_probs in zip(reviews, aspect_prob_list):
+        for idx, (review, aspect_probs) in enumerate(zip(reviews, aspect_prob_list)):
+            platform = getattr(review, "platform", None)
+            platform_settings = self.settings.for_platform(platform) if platform else self.settings
+
             chosen_aspects = self._select_aspects(aspect_probs, review.review_text)
 
             sentiment_map: dict[str, str] = {}
             non_none_aspects = [aspect for aspect in chosen_aspects if aspect != NONE_ASPECT]
             if non_none_aspects:
-                sentiments = self.sentiment_model.predict_many(
-                    review_texts=[review.review_text] * len(non_none_aspects),
+                sentiment_map = self._predict_sentiments_with_calibration(
+                    review_text=review.review_text,
                     aspects=non_none_aspects,
+                    platform_settings=platform_settings,
                 )
-                for aspect, sentiment in zip(non_none_aspects, sentiments):
-                    sentiment_map[aspect] = sentiment
             if NONE_ASPECT in chosen_aspects:
                 sentiment_map[NONE_ASPECT] = "neutral"
 
@@ -186,6 +188,51 @@ class ABSAPredictor:
             )
 
         return outputs
+
+    def _predict_sentiments_with_calibration(
+        self,
+        review_text: str,
+        aspects: list[str],
+        platform_settings: InferenceSettings,
+    ) -> dict[str, str]:
+        """Predict sentiments with threshold calibration for neutral boost."""
+        if not aspects:
+            return {}
+
+        conditioned_texts = [
+            build_aspect_conditioned_text(review_text, aspect) for aspect in aspects
+        ]
+        X = self.sentiment_model._transform(conditioned_texts, fit=False)
+
+        probs = self.sentiment_model._classifier.predict_proba(X)
+
+        sentiment_map: dict[str, str] = {}
+        for idx, aspect in enumerate(aspects):
+            sentiment_thresholds = platform_settings.sentiment_thresholds
+
+            if aspect in (NONE_ASPECT, "general"):
+                sentiment_map[aspect] = "neutral"
+                continue
+
+            thresholds = {
+                "negative": sentiment_thresholds.get("negative", 0.45),
+                "neutral": sentiment_thresholds.get("neutral", 0.25),
+                "positive": sentiment_thresholds.get("positive", 0.45),
+            }
+
+            best_sentiment = "neutral"
+            best_score = probs[idx][SENTIMENT_TO_ID["neutral"]] - thresholds.get("neutral", 0.25)
+
+            for sentiment in SENTIMENT_LABELS:
+                sentiment_idx = SENTIMENT_TO_ID[sentiment]
+                score = probs[idx][sentiment_idx] - thresholds.get(sentiment, 0.45)
+                if score > best_score:
+                    best_score = score
+                    best_sentiment = sentiment
+
+            sentiment_map[aspect] = best_sentiment
+
+        return sentiment_map
 
     @classmethod
     def from_artifacts(
