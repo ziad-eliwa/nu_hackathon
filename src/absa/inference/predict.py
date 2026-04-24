@@ -139,7 +139,7 @@ class ABSAPredictor:
             if word_count <= 2:
                 none_prob = normalized_probs.get(NONE_ASPECT, 0)
                 general_prob = normalized_probs.get("general", 0)
-                if none_prob > 0.3 or general_prob > 0.4:
+                if none_prob > self.settings.fallback_none_threshold or general_prob > self.settings.fallback_general_threshold:
                     return [NONE_ASPECT] if none_prob > general_prob else ["general"]
 
         selected_non_none = [
@@ -152,8 +152,11 @@ class ABSAPredictor:
         if selected_non_none:
             return selected_non_none
 
-        if normalized_probs[NONE_ASPECT] >= self.settings.threshold_for(NONE_ASPECT):
+        if normalized_probs[NONE_ASPECT] >= self.settings.fallback_none_threshold:
             return [NONE_ASPECT]
+
+        if normalized_probs.get("general", 0.0) >= self.settings.fallback_general_threshold:
+            return ["general"]
 
         if self.settings.fallback_aspect in ASPECT_TAXONOMY:
             return [self.settings.fallback_aspect]

@@ -86,7 +86,7 @@ def _run_predict(argv: list[str]) -> int:
         for r in records
     ]
 
-    aspect_model = AspectEnsemblePredictor.load_from_artifacts("artifacts")
+    aspect_model = AspectEnsemblePredictor.load_from_artifacts(args.model_dir)
     aspect_probs = aspect_model.predict_aspect_probs(records)
     
     from collections import defaultdict
@@ -103,10 +103,10 @@ def _run_predict(argv: list[str]) -> int:
     aspect_provider = DictAspectProvider(aspect_prob_dict)
 
     sentiment_model = AspectConditionedSentimentModel.load(
-        "artifacts/sentiment_model/sentiment_model.joblib"
+        f"{args.model_dir}/sentiment_model/sentiment_model.joblib"
     )
     settings = InferenceSettings.from_threshold_file(
-        "artifacts/calibration/aspect_thresholds.json"
+        f"{args.model_dir}/calibration/aspect_thresholds.json"
     )
 
     predictor = ABSAPredictor(

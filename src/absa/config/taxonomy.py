@@ -2,6 +2,17 @@ from __future__ import annotations
 
 from typing import Final
 
+ASPECTS: Final[tuple[str, ...]] = (
+    "food",
+    "service",
+    "price",
+    "cleanliness",
+    "delivery",
+    "ambiance",
+    "app_experience",
+    "general",
+    "none",
+)
 ASPECT_TAXONOMY: Final[tuple[str, ...]] = (
     "food",
     "service",

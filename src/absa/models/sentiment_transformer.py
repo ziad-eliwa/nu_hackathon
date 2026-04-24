@@ -141,35 +141,38 @@ class AspectConditionedSentimentModel:
         if self.correct_spelling:
             texts = [normalize_and_correct_text(t) for t in texts]
         
-        X = self._vectorizer.fit_transform(texts).toarray()
+        X_sparse = self._vectorizer.fit_transform(texts)
         y = np.array([SENTIMENT_TO_ID[label] for label in normalized_labels])
         
-        input_dim = X.shape[1]
+        input_dim = X_sparse.shape[1]
         self._model = self._build_model(input_dim)
         
-        X_tensor = torch.FloatTensor(X)
-        y_tensor = torch.LongTensor(y)
+        batch_size = self.batch_size
+        n_samples = X_sparse.shape[0]
         
         class_counts = np.bincount(y)
         class_weights = 1.0 / (class_counts + 1)
         class_weights = class_weights / class_weights.sum() * len(class_weights)
         class_weights = torch.FloatTensor(class_weights).to(self._device)
         
-        dataset = TensorDataset(X_tensor, y_tensor)
-        dataloader = DataLoader(dataset, batch_size=self.batch_size, shuffle=True)
-        
         criterion = nn.CrossEntropyLoss(weight=class_weights)
         optimizer = torch.optim.Adam(self._model.parameters(), lr=self.learning_rate)
         
         self._model.train()
         for epoch in range(self.epochs):
-            for batch_X, batch_y in dataloader:
-                batch_X = batch_X.to(self._device)
-                batch_y = batch_y.to(self._device)
+            indices = np.random.permutation(n_samples)
+            for start in range(0, n_samples, batch_size):
+                end = min(start + batch_size, n_samples)
+                batch_indices = indices[start:end]
+                X_batch = X_sparse[batch_indices].toarray()
+                y_batch = y[batch_indices]
+                
+                X_tensor = torch.FloatTensor(X_batch).to(self._device)
+                y_tensor = torch.LongTensor(y_batch).to(self._device)
                 
                 optimizer.zero_grad()
-                outputs = self._model(batch_X)
-                loss = criterion(outputs, batch_y)
+                outputs = self._model(X_tensor)
+                loss = criterion(outputs, y_tensor)
                 loss.backward()
                 optimizer.step()
         
@@ -216,13 +219,21 @@ class AspectConditionedSentimentModel:
         if self.correct_spelling:
             texts = [normalize_and_correct_text(t) for t in texts]
 
-        X = self._vectorizer.transform(texts).toarray()
-        X_tensor = torch.FloatTensor(X).to(self._device)
+        X_sparse = self._vectorizer.transform(texts)
         
         self._model.eval()
+        predictions = []
+        batch_size = self.batch_size
+        n_samples = X_sparse.shape[0]
+        
         with torch.no_grad():
-            outputs = self._model(X_tensor)
-            predictions = torch.argmax(outputs, dim=1).cpu().numpy()
+            for start in range(0, n_samples, batch_size):
+                end = min(start + batch_size, n_samples)
+                X_batch = X_sparse[start:end].toarray()
+                X_tensor = torch.FloatTensor(X_batch).to(self._device)
+                outputs = self._model(X_tensor)
+                batch_preds = torch.argmax(outputs, dim=1).cpu().numpy()
+                predictions.extend(batch_preds)
         
         id_to_sentiment = {v: k for k, v in SENTIMENT_TO_ID.items()}
         return [id_to_sentiment[int(pred)] for pred in predictions]
@@ -246,8 +257,9 @@ class AspectConditionedSentimentModel:
         if self.correct_spelling:
             texts = [normalize_and_correct_text(t) for t in texts]
 
-        X = self._vectorizer.transform(texts).toarray()
-        X_tensor = torch.FloatTensor(X).to(self._device)
+        X_sparse = self._vectorizer.transform(texts)
+        X_dense = X_sparse.toarray()
+        X_tensor = torch.FloatTensor(X_dense).to(self._device)
         
         self._model.eval()
         with torch.no_grad():

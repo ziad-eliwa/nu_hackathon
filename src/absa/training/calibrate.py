@@ -8,6 +8,7 @@ import numpy as np
 from sklearn.metrics import f1_score
 
 from absa.config.taxonomy import ASPECT_TAXONOMY as ASPECTS, ordered_aspects
+from absa.config.settings import DEFAULT_NONE_THRESHOLD, DEFAULT_GENERAL_THRESHOLD
 
 
 def optimize_aspect_thresholds(
@@ -61,8 +62,8 @@ def optimize_aspect_thresholds(
 def apply_thresholds(
     prob_map: dict[str, float],
     thresholds: dict[str, float],
-    fallback_none_threshold: float = 0.3,
-    fallback_general_threshold: float = 0.55,
+    fallback_none_threshold: float = DEFAULT_NONE_THRESHOLD,
+    fallback_general_threshold: float = DEFAULT_GENERAL_THRESHOLD,
     none_aggressive: bool = True,
 ) -> list[str]:
     selected = [aspect for aspect, prob in prob_map.items() if prob >= thresholds.get(aspect, 0.5)]
@@ -93,8 +94,8 @@ def apply_thresholds(
 def save_thresholds_config(
     path: str | Path,
     thresholds: dict[str, float],
-    fallback_none_threshold: float = 0.6,
-    fallback_general_threshold: float = 0.55,
+    fallback_none_threshold: float = DEFAULT_NONE_THRESHOLD,
+    fallback_general_threshold: float = DEFAULT_GENERAL_THRESHOLD,
     version: str = "path-a-v1",
 ) -> None:
     payload = {

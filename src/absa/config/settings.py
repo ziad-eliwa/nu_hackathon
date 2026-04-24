@@ -43,6 +43,9 @@ from pathlib import Path
 
 from .taxonomy import ASPECT_TAXONOMY
 
+DEFAULT_NONE_THRESHOLD: float = 0.5
+DEFAULT_GENERAL_THRESHOLD: float = 0.55
+
 
 @dataclass(slots=True)
 class InferenceSettings:
@@ -53,12 +56,16 @@ class InferenceSettings:
         aspect_thresholds: Per-aspect thresholds from Path A calibration output.
         fallback_aspect: Used when no aspect passes threshold and `none` is weak.
         suppress_none_when_other_aspects_exist: Enforce exclusivity preference.
+        fallback_none_threshold: Threshold for treating "none" as detected when no concrete aspects pass.
+        fallback_general_threshold: Threshold for treating "general" as detected in fallback.
     """
 
     default_threshold: float = 0.5
     aspect_thresholds: dict[str, float] = field(default_factory=dict)
     fallback_aspect: str = "general"
     suppress_none_when_other_aspects_exist: bool = True
+    fallback_none_threshold: float = DEFAULT_NONE_THRESHOLD
+    fallback_general_threshold: float = DEFAULT_GENERAL_THRESHOLD
 
     def threshold_for(self, aspect: str) -> float:
         """Return the threshold for one aspect, with a safe default fallback."""
@@ -76,6 +83,7 @@ class InferenceSettings:
         Supported formats:
         1) {"service": 0.51, ...}
         2) {"thresholds": {"service": 0.51, ...}, ...}
+        3) Full format with fallback_policy from save_thresholds_config
         """
         path = Path(threshold_path)
         payload = json.loads(path.read_text(encoding="utf-8"))
@@ -97,8 +105,14 @@ class InferenceSettings:
                 continue
             thresholds[aspect] = float(raw)
 
+        fallback_policy = payload.get("fallback_policy", {})
+        none_threshold = fallback_policy.get("none_threshold", DEFAULT_NONE_THRESHOLD)
+        general_threshold = fallback_policy.get("general_threshold", DEFAULT_GENERAL_THRESHOLD)
+
         return cls(
             default_threshold=float(default_threshold),
             aspect_thresholds=thresholds,
             fallback_aspect=fallback_aspect,
+            fallback_none_threshold=none_threshold,
+            fallback_general_threshold=general_threshold,
         )
