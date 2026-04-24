@@ -28,6 +28,7 @@ def main(argv: list[str] | None = None) -> int:
         print("  predict             Run end-to-end inference (Path A + Path B)")
         print("  evaluate            Evaluate predictions against validation set")
         print("  semi-supervised     Train with pseudo-labeling on unlabeled data")
+        print("  run-improvements    Run preprocessing/model improvement experiments")
         return 0
 
     command = argv[0]
@@ -52,6 +53,11 @@ def main(argv: list[str] | None = None) -> int:
         import importlib
         train_module = importlib.import_module("absa.training.semi_supervised")
         return train_module.main()
+
+    if command == "run-improvements":
+        import importlib
+        module = importlib.import_module("absa.training.run_improvements")
+        return module.main(argv[1:])
 
     print(f"Unknown command: {command}")
     return 1

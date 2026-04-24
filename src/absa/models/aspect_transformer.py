@@ -20,8 +20,10 @@ from absa.preprocess.normalize import normalize_text
 
 @dataclass
 class TransformerConfig:
-    max_features: int = 30_000
-    alpha: float = 1e-5
+    max_features: int | None = None
+    max_word_features: int = 40_000
+    max_char_features: int = 30_000
+    alpha: float = 5e-6
     random_seed: int = 42
 
 
@@ -35,10 +37,22 @@ class AspectTransformerModel:
 
     def __init__(self, config: TransformerConfig | None = None) -> None:
         self.config = config or TransformerConfig()
-        self.text_vectorizer = TfidfVectorizer(
+        max_word_features = self.config.max_word_features
+        max_char_features = self.config.max_char_features
+        if self.config.max_features is not None:
+            max_word_features = int(self.config.max_features)
+            max_char_features = int(self.config.max_features)
+        self.word_vectorizer = TfidfVectorizer(
             analyzer="word",
             ngram_range=(1, 3),
-            max_features=self.config.max_features,
+            max_features=max_word_features,
+            min_df=2,
+            lowercase=False,
+        )
+        self.char_vectorizer = TfidfVectorizer(
+            analyzer="char_wb",
+            ngram_range=(3, 6),
+            max_features=max_char_features,
             min_df=2,
             lowercase=False,
         )
@@ -49,6 +63,7 @@ class AspectTransformerModel:
                 penalty="l2",
                 alpha=self.config.alpha,
                 max_iter=2000,
+                class_weight="balanced",
                 random_state=self.config.random_seed,
             )
         )
@@ -58,12 +73,14 @@ class AspectTransformerModel:
         texts = [normalize_text(record.review_text) for record in records]
         metadata = [record_to_metadata(record) for record in records]
         if fit:
-            text_features = self.text_vectorizer.fit_transform(texts)
+            word_features = self.word_vectorizer.fit_transform(texts)
+            char_features = self.char_vectorizer.fit_transform(texts)
             meta_features = self.metadata_vectorizer.fit_transform(metadata)
         else:
-            text_features = self.text_vectorizer.transform(texts)
+            word_features = self.word_vectorizer.transform(texts)
+            char_features = self.char_vectorizer.transform(texts)
             meta_features = self.metadata_vectorizer.transform(metadata)
-        return hstack([text_features, meta_features]).tocsr()
+        return hstack([word_features, char_features, meta_features]).tocsr()
 
     def fit(self, records: Sequence[ReviewRecord], labels: np.ndarray) -> None:
         features = self._build_features(records, fit=True)

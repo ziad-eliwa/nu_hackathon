@@ -70,6 +70,7 @@ def train_and_evaluate_sentiment(
     train_csv: str | Path,
     validation_csv: str | Path,
     output_dir: str | Path,
+    model_kwargs: dict | None = None,
 ) -> dict:
     """Train model and export artifacts/metrics.
 
@@ -84,7 +85,7 @@ def train_and_evaluate_sentiment(
     validation_df = _load_labeled_csv(validation_csv)
 
     # Step 2: build and train the model on train split.
-    model = AspectConditionedSentimentModel()
+    model = AspectConditionedSentimentModel(**(model_kwargs or {}))
     train_texts, train_labels, _, _ = build_training_examples_from_dataframe(train_df)
     model.fit(train_texts, train_labels)
 
@@ -132,6 +133,11 @@ def _build_arg_parser() -> argparse.ArgumentParser:
         default="artifacts/sentiment_model",
         help="Directory where model and metrics will be written",
     )
+    parser.add_argument("--word-max-features", type=int, default=40000)
+    parser.add_argument("--char-max-features", type=int, default=30000)
+    parser.add_argument("--min-df", type=int, default=2)
+    parser.add_argument("--c", type=float, default=2.0)
+    parser.add_argument("--correct-spelling", action="store_true")
     return parser
 
 
@@ -144,6 +150,13 @@ def main(argv: list[str] | None = None) -> int:
         train_csv=args.train_csv,
         validation_csv=args.validation_csv,
         output_dir=args.output_dir,
+        model_kwargs={
+            "word_max_features": args.word_max_features,
+            "char_max_features": args.char_max_features,
+            "min_df": args.min_df,
+            "c": args.c,
+            "correct_spelling": bool(args.correct_spelling),
+        },
     )
 
     print("Sentiment training finished")

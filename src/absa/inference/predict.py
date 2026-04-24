@@ -115,16 +115,6 @@ class ABSAPredictor:
         word_count = len(text.split())
         return word_count <= 3
 
-    def _is_mixed_sentiment(self, text: str) -> bool:
-        positive_indicators = ['جميل', 'ممتاز', 'عظيم', 'م沂好', 'حب', 'رائع', 'GOOD', 'great', 'love', 'excellent', '👍', '❤', '⭐']
-        negative_indicators = ['سيء', 'فظيع', 'مزعج', ' плохо', 'BAD', 'terrible', 'hate', 'worst', '👎', '😡']
-        
-        text_lower = text.lower()
-        pos_count = sum(1 for w in positive_indicators if w in text_lower)
-        neg_count = sum(1 for w in negative_indicators if w in text_lower)
-        
-        return pos_count > 0 and neg_count > 0
-
     def _select_aspects(self, aspect_probs: Mapping[str, float], review_text: str = "") -> list[str]:
         """Convert probability map into final aspect list with calibrated rules."""
         normalized_probs = {
@@ -132,7 +122,6 @@ class ABSAPredictor:
         }
 
         is_short = self._is_short_text(review_text) if review_text else False
-        is_mixed = self._is_mixed_sentiment(review_text) if review_text else False
 
         if is_short and review_text:
             word_count = len(review_text.split())
@@ -177,15 +166,16 @@ class ABSAPredictor:
             chosen_aspects = self._select_aspects(aspect_probs, review.review_text)
 
             sentiment_map: dict[str, str] = {}
-            for aspect in chosen_aspects:
-                if aspect == NONE_ASPECT:
-                    sentiment_map[aspect] = "neutral"
-                    continue
-
-                sentiment_map[aspect] = self.sentiment_model.predict(
-                    review_text=review.review_text,
-                    aspect=aspect,
+            non_none_aspects = [aspect for aspect in chosen_aspects if aspect != NONE_ASPECT]
+            if non_none_aspects:
+                sentiments = self.sentiment_model.predict_many(
+                    review_texts=[review.review_text] * len(non_none_aspects),
+                    aspects=non_none_aspects,
                 )
+                for aspect, sentiment in zip(non_none_aspects, sentiments):
+                    sentiment_map[aspect] = sentiment
+            if NONE_ASPECT in chosen_aspects:
+                sentiment_map[NONE_ASPECT] = "neutral"
 
             outputs.append(
                 finalize_prediction(

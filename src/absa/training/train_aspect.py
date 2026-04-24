@@ -97,6 +97,7 @@ def train_path_a(
     train_csv: str,
     validation_csv: str,
     artifacts_root: str,
+    transformer_config: TransformerConfig | None = None,
 ) -> dict[str, object]:
     train_records = load_labeled_reviews(train_csv)
     val_records = load_labeled_reviews(validation_csv)
@@ -107,8 +108,7 @@ def train_path_a(
     linear_model.fit(train_records, y_train)
     linear_probs = linear_model.predict_proba(val_records)
 
-    transformer_config = TransformerConfig()
-    transformer_model = AspectTransformerModel(config=transformer_config)
+    transformer_model = AspectTransformerModel(config=transformer_config or TransformerConfig())
     transformer_model.fit(train_records, y_train)
     transformer_probs = transformer_model.predict_proba(val_records)
 
@@ -182,6 +182,9 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--train-csv", default=str(defaults.train_csv))
     parser.add_argument("--validation-csv", default=str(defaults.validation_csv))
     parser.add_argument("--artifacts-root", default=str(artifacts.root))
+    parser.add_argument("--transformer-word-features", type=int, default=40000)
+    parser.add_argument("--transformer-char-features", type=int, default=30000)
+    parser.add_argument("--transformer-alpha", type=float, default=5e-6)
     return parser
 
 
@@ -192,6 +195,11 @@ def main() -> None:
         train_csv=args.train_csv,
         validation_csv=args.validation_csv,
         artifacts_root=args.artifacts_root,
+        transformer_config=TransformerConfig(
+            max_word_features=args.transformer_word_features,
+            max_char_features=args.transformer_char_features,
+            alpha=args.transformer_alpha,
+        ),
     )
     print(json.dumps(payload, indent=2, ensure_ascii=True))
 

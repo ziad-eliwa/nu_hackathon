@@ -1,0 +1,850 @@
+[
+  {
+    "experiment": "exp_01_balanced_baseline",
+    "normalize_profile": "balanced",
+    "train_seconds": 40.88,
+    "aspect_train": {
+      "metrics": {
+        "micro_f1": 0.7990867579908676,
+        "macro_f1": 0.7209828272109973
+      },
+      "slice_metrics": {
+        "platform": {
+          "google_maps": {
+            "micro_f1": 0.78719723183391,
+            "macro_f1": 0.5961500283006463,
+            "count": 312
+          },
+          "play_store": {
+            "micro_f1": 0.8221476510067114,
+            "macro_f1": 0.47614934657336544,
+            "count": 188
+          }
+        },
+        "length_bucket": {
+          "short": {
+            "micro_f1": 0.77882797731569,
+            "macro_f1": 0.6621087517055377,
+            "count": 213
+          },
+          "medium": {
+            "micro_f1": 0.7967479674796748,
+            "macro_f1": 0.7084242258370634,
+            "count": 221
+          },
+          "long": {
+            "micro_f1": 0.8342541436464088,
+            "macro_f1": 0.638560800752852,
+            "count": 66
+          }
+        },
+        "aspects_per_review": {
+          "1": {
+            "micro_f1": 0.7378640776699029,
+            "macro_f1": 0.5140366865887641,
+            "count": 273
+          },
+          "3+": {
+            "micro_f1": 0.864406779661017,
+            "macro_f1": 0.6584760834197341,
+            "count": 94
+          },
+          "2": {
+            "micro_f1": 0.7977941176470589,
+            "macro_f1": 0.6023257175734426,
+            "count": 133
+          }
+        }
+      },
+      "ensemble": {
+        "linear_weight": 1.0,
+        "transformer_weight": 0.0
+      }
+    },
+    "sentiment_train": {
+      "run_utc": "2026-04-24T15:41:24.244882+00:00",
+      "train_csv": "data/DeepX_train.csv",
+      "validation_csv": "data/DeepX_validation.csv",
+      "model_path": "artifacts/improvements/exp_01_balanced_baseline/sentiment_model/sentiment_model.joblib",
+      "train": {
+        "num_samples": 3333,
+        "num_unique_reviews": 1971,
+        "num_unique_aspects": 9,
+        "macro_f1": 0.8392869005319775,
+        "report": {
+          "negative": {
+            "precision": 0.9665775401069518,
+            "recall": 0.9401820546163849,
+            "f1-score": 0.9531970995385629,
+            "support": 1538.0
+          },
+          "neutral": {
+            "precision": 0.47058823529411764,
+            "recall": 0.9664429530201343,
+            "f1-score": 0.6329670329670329,
+            "support": 149.0
+          },
+          "positive": {
+            "precision": 0.9666884389288047,
+            "recall": 0.8991494532199271,
+            "f1-score": 0.9316965690903368,
+            "support": 1646.0
+          },
+          "accuracy": 0.9210921092109211,
+          "macro avg": {
+            "precision": 0.801284738109958,
+            "recall": 0.9352581536188155,
+            "f1-score": 0.8392869005319775,
+            "support": 3333.0
+          },
+          "weighted avg": {
+            "precision": 0.9444593682028587,
+            "recall": 0.9210921092109211,
+            "f1-score": 0.9282633602535528,
+            "support": 3333.0
+          }
+        }
+      },
+      "validation": {
+        "num_samples": 840,
+        "num_unique_reviews": 500,
+        "num_unique_aspects": 9,
+        "macro_f1": 0.6902052422483987,
+        "report": {
+          "negative": {
+            "precision": 0.8528610354223434,
+            "recall": 0.876750700280112,
+            "f1-score": 0.8646408839779005,
+            "support": 357.0
+          },
+          "neutral": {
+            "precision": 0.2647058823529412,
+            "recall": 0.45,
+            "f1-score": 0.3333333333333333,
+            "support": 40.0
+          },
+          "positive": {
+            "precision": 0.9135802469135802,
+            "recall": 0.835214446952596,
+            "f1-score": 0.8726415094339622,
+            "support": 443.0
+          },
+          "accuracy": 0.8345238095238096,
+          "macro avg": {
+            "precision": 0.6770490548962882,
+            "recall": 0.7206550490775694,
+            "f1-score": 0.6902052422483987,
+            "support": 840.0
+          },
+          "weighted avg": {
+            "precision": 0.8568758027650122,
+            "recall": 0.8345238095238096,
+            "f1-score": 0.8435599018960585,
+            "support": 840.0
+          }
+        }
+      }
+    },
+    "validation_metrics": {
+      "aspect_detection": {
+        "num_reviews": 500,
+        "micro_f1": 0.792,
+        "macro_f1": 0.695132761201886,
+        "per_aspect_f1": {
+          "food": 0.7938144329896907,
+          "service": 0.8450184501845018,
+          "price": 0.7643312101910829,
+          "cleanliness": 0.5904761904761905,
+          "delivery": 0.7070707070707071,
+          "ambiance": 0.7860262008733624,
+          "app_experience": 0.8844621513944223,
+          "general": 0.7421383647798742,
+          "none": 0.14285714285714285
+        }
+      },
+      "sentiment_given_aspect": {
+        "num_overlap_aspect_instances": 693,
+        "coverage_over_gold_aspects": 0.825,
+        "macro_f1": 0.6333700036670333,
+        "report": {
+          "negative": {
+            "precision": 0.8721311475409836,
+            "recall": 0.8837209302325582,
+            "f1-score": 0.8778877887788779,
+            "support": 301.0
+          },
+          "neutral": {
+            "precision": 0.0975609756097561,
+            "recall": 0.21052631578947367,
+            "f1-score": 0.13333333333333333,
+            "support": 19.0
+          },
+          "positive": {
+            "precision": 0.9221902017291066,
+            "recall": 0.8579088471849866,
+            "f1-score": 0.8888888888888888,
+            "support": 373.0
+          },
+          "accuracy": 0.8513708513708513,
+          "macro avg": {
+            "precision": 0.6306274416266154,
+            "recall": 0.6507186977356728,
+            "f1-score": 0.6333700036670333,
+            "support": 693.0
+          },
+          "weighted avg": {
+            "precision": 0.8778384981116568,
+            "recall": 0.8513708513708513,
+            "f1-score": 0.8633955459037966,
+            "support": 693.0
+          }
+        }
+      },
+      "tuple": {
+        "num_reviews": 500,
+        "true_positive": 590,
+        "false_positive": 320,
+        "false_negative": 250,
+        "precision": 0.6483516483516484,
+        "recall": 0.7023809523809523,
+        "f1": 0.6742857142857142
+      }
+    }
+  },
+  {
+    "experiment": "exp_02_aggressive_preprocess",
+    "normalize_profile": "aggressive",
+    "train_seconds": 43.66,
+    "aspect_train": {
+      "metrics": {
+        "micro_f1": 0.8,
+        "macro_f1": 0.7214376364439369
+      },
+      "slice_metrics": {
+        "platform": {
+          "google_maps": {
+            "micro_f1": 0.7877729257641921,
+            "macro_f1": 0.5958923311379526,
+            "count": 312
+          },
+          "play_store": {
+            "micro_f1": 0.8235294117647058,
+            "macro_f1": 0.47725934768336653,
+            "count": 188
+          }
+        },
+        "length_bucket": {
+          "short": {
+            "micro_f1": 0.7741935483870968,
+            "macro_f1": 0.6392962714718496,
+            "count": 213
+          },
+          "medium": {
+            "micro_f1": 0.7981330221703618,
+            "macro_f1": 0.7094683286053041,
+            "count": 221
+          },
+          "long": {
+            "micro_f1": 0.8426966292134831,
+            "macro_f1": 0.6436777598171796,
+            "count": 66
+          }
+        },
+        "aspects_per_review": {
+          "1": {
+            "micro_f1": 0.7418300653594772,
+            "macro_f1": 0.5133655418640182,
+            "count": 273
+          },
+          "3+": {
+            "micro_f1": 0.8683760683760684,
+            "macro_f1": 0.6620803925480436,
+            "count": 94
+          },
+          "2": {
+            "micro_f1": 0.7918968692449355,
+            "macro_f1": 0.5899723704374867,
+            "count": 133
+          }
+        }
+      },
+      "ensemble": {
+        "linear_weight": 1.0,
+        "transformer_weight": 0.0
+      }
+    },
+    "sentiment_train": {
+      "run_utc": "2026-04-24T15:42:07.899764+00:00",
+      "train_csv": "data/DeepX_train.csv",
+      "validation_csv": "data/DeepX_validation.csv",
+      "model_path": "artifacts/improvements/exp_02_aggressive_preprocess/sentiment_model/sentiment_model.joblib",
+      "train": {
+        "num_samples": 3333,
+        "num_unique_reviews": 1971,
+        "num_unique_aspects": 9,
+        "macro_f1": 0.8392869005319775,
+        "report": {
+          "negative": {
+            "precision": 0.9665775401069518,
+            "recall": 0.9401820546163849,
+            "f1-score": 0.9531970995385629,
+            "support": 1538.0
+          },
+          "neutral": {
+            "precision": 0.47058823529411764,
+            "recall": 0.9664429530201343,
+            "f1-score": 0.6329670329670329,
+            "support": 149.0
+          },
+          "positive": {
+            "precision": 0.9666884389288047,
+            "recall": 0.8991494532199271,
+            "f1-score": 0.9316965690903368,
+            "support": 1646.0
+          },
+          "accuracy": 0.9210921092109211,
+          "macro avg": {
+            "precision": 0.801284738109958,
+            "recall": 0.9352581536188155,
+            "f1-score": 0.8392869005319775,
+            "support": 3333.0
+          },
+          "weighted avg": {
+            "precision": 0.9444593682028587,
+            "recall": 0.9210921092109211,
+            "f1-score": 0.9282633602535528,
+            "support": 3333.0
+          }
+        }
+      },
+      "validation": {
+        "num_samples": 840,
+        "num_unique_reviews": 500,
+        "num_unique_aspects": 9,
+        "macro_f1": 0.6902052422483987,
+        "report": {
+          "negative": {
+            "precision": 0.8528610354223434,
+            "recall": 0.876750700280112,
+            "f1-score": 0.8646408839779005,
+            "support": 357.0
+          },
+          "neutral": {
+            "precision": 0.2647058823529412,
+            "recall": 0.45,
+            "f1-score": 0.3333333333333333,
+            "support": 40.0
+          },
+          "positive": {
+            "precision": 0.9135802469135802,
+            "recall": 0.835214446952596,
+            "f1-score": 0.8726415094339622,
+            "support": 443.0
+          },
+          "accuracy": 0.8345238095238096,
+          "macro avg": {
+            "precision": 0.6770490548962882,
+            "recall": 0.7206550490775694,
+            "f1-score": 0.6902052422483987,
+            "support": 840.0
+          },
+          "weighted avg": {
+            "precision": 0.8568758027650122,
+            "recall": 0.8345238095238096,
+            "f1-score": 0.8435599018960585,
+            "support": 840.0
+          }
+        }
+      }
+    },
+    "validation_metrics": {
+      "aspect_detection": {
+        "num_reviews": 500,
+        "micro_f1": 0.7928653624856157,
+        "macro_f1": 0.6955858278405755,
+        "per_aspect_f1": {
+          "food": 0.7938144329896907,
+          "service": 0.8428835489833642,
+          "price": 0.7643312101910829,
+          "cleanliness": 0.5894736842105263,
+          "delivery": 0.7142857142857143,
+          "ambiance": 0.7860262008733624,
+          "app_experience": 0.8844621513944223,
+          "general": 0.7421383647798742,
+          "none": 0.14285714285714285
+        }
+      },
+      "sentiment_given_aspect": {
+        "num_overlap_aspect_instances": 689,
+        "coverage_over_gold_aspects": 0.8202380952380952,
+        "macro_f1": 0.6339575791061193,
+        "report": {
+          "negative": {
+            "precision": 0.875,
+            "recall": 0.8837209302325582,
+            "f1-score": 0.8793388429752066,
+            "support": 301.0
+          },
+          "neutral": {
+            "precision": 0.0975609756097561,
+            "recall": 0.21052631578947367,
+            "f1-score": 0.13333333333333333,
+            "support": 19.0
+          },
+          "positive": {
+            "precision": 0.9215116279069767,
+            "recall": 0.8590785907859079,
+            "f1-score": 0.8892005610098177,
+            "support": 369.0
+          },
+          "accuracy": 0.8519593613933236,
+          "macro avg": {
+            "precision": 0.6313575345055776,
+            "recall": 0.6511086122693133,
+            "f1-score": 0.6339575791061193,
+            "support": 689.0
+          },
+          "weighted avg": {
+            "precision": 0.8784708987434829,
+            "recall": 0.8519593613933236,
+            "f1-score": 0.8640483774767681,
+            "support": 689.0
+          }
+        }
+      },
+      "tuple": {
+        "num_reviews": 500,
+        "true_positive": 587,
+        "false_positive": 311,
+        "false_negative": 253,
+        "precision": 0.6536748329621381,
+        "recall": 0.6988095238095238,
+        "f1": 0.6754890678941311
+      }
+    }
+  },
+  {
+    "experiment": "exp_03_aggressive_high_capacity",
+    "normalize_profile": "aggressive",
+    "train_seconds": 43.65,
+    "aspect_train": {
+      "metrics": {
+        "micro_f1": 0.8,
+        "macro_f1": 0.7214376364439369
+      },
+      "slice_metrics": {
+        "platform": {
+          "google_maps": {
+            "micro_f1": 0.7877729257641921,
+            "macro_f1": 0.5958923311379526,
+            "count": 312
+          },
+          "play_store": {
+            "micro_f1": 0.8235294117647058,
+            "macro_f1": 0.47725934768336653,
+            "count": 188
+          }
+        },
+        "length_bucket": {
+          "short": {
+            "micro_f1": 0.7741935483870968,
+            "macro_f1": 0.6392962714718496,
+            "count": 213
+          },
+          "medium": {
+            "micro_f1": 0.7981330221703618,
+            "macro_f1": 0.7094683286053041,
+            "count": 221
+          },
+          "long": {
+            "micro_f1": 0.8426966292134831,
+            "macro_f1": 0.6436777598171796,
+            "count": 66
+          }
+        },
+        "aspects_per_review": {
+          "1": {
+            "micro_f1": 0.7418300653594772,
+            "macro_f1": 0.5133655418640182,
+            "count": 273
+          },
+          "3+": {
+            "micro_f1": 0.8683760683760684,
+            "macro_f1": 0.6620803925480436,
+            "count": 94
+          },
+          "2": {
+            "micro_f1": 0.7918968692449355,
+            "macro_f1": 0.5899723704374867,
+            "count": 133
+          }
+        }
+      },
+      "ensemble": {
+        "linear_weight": 1.0,
+        "transformer_weight": 0.0
+      }
+    },
+    "sentiment_train": {
+      "run_utc": "2026-04-24T15:42:51.459616+00:00",
+      "train_csv": "data/DeepX_train.csv",
+      "validation_csv": "data/DeepX_validation.csv",
+      "model_path": "artifacts/improvements/exp_03_aggressive_high_capacity/sentiment_model/sentiment_model.joblib",
+      "train": {
+        "num_samples": 3333,
+        "num_unique_reviews": 1971,
+        "num_unique_aspects": 9,
+        "macro_f1": 0.8985925699547779,
+        "report": {
+          "negative": {
+            "precision": 0.9626229508196721,
+            "recall": 0.9544863459037711,
+            "f1-score": 0.9585373816519752,
+            "support": 1538.0
+          },
+          "neutral": {
+            "precision": 0.7393939393939394,
+            "recall": 0.8187919463087249,
+            "f1-score": 0.7770700636942676,
+            "support": 149.0
+          },
+          "positive": {
+            "precision": 0.9610468654899574,
+            "recall": 0.9592952612393681,
+            "f1-score": 0.9601702645180906,
+            "support": 1646.0
+          },
+          "accuracy": 0.9507950795079508,
+          "macro avg": {
+            "precision": 0.8876879185678562,
+            "recall": 0.9108578511506215,
+            "f1-score": 0.8985925699547779,
+            "support": 3333.0
+          },
+          "weighted avg": {
+            "precision": 0.9518652673047773,
+            "recall": 0.9507950795079508,
+            "f1-score": 0.9512313794983381,
+            "support": 3333.0
+          }
+        }
+      },
+      "validation": {
+        "num_samples": 840,
+        "num_unique_reviews": 500,
+        "num_unique_aspects": 9,
+        "macro_f1": 0.7303595618242538,
+        "report": {
+          "negative": {
+            "precision": 0.8575268817204301,
+            "recall": 0.8935574229691877,
+            "f1-score": 0.8751714677640604,
+            "support": 357.0
+          },
+          "neutral": {
+            "precision": 0.7058823529411765,
+            "recall": 0.3,
+            "f1-score": 0.42105263157894735,
+            "support": 40.0
+          },
+          "positive": {
+            "precision": 0.8869179600886918,
+            "recall": 0.9029345372460497,
+            "f1-score": 0.8948545861297539,
+            "support": 443.0
+          },
+          "accuracy": 0.8702380952380953,
+          "macro avg": {
+            "precision": 0.8167757315834328,
+            "recall": 0.6988306534050791,
+            "f1-score": 0.7303595618242538,
+            "support": 840.0
+          },
+          "weighted avg": {
+            "precision": 0.8658060085846798,
+            "recall": 0.8702380952380953,
+            "f1-score": 0.8639272629885816,
+            "support": 840.0
+          }
+        }
+      }
+    },
+    "validation_metrics": {
+      "aspect_detection": {
+        "num_reviews": 500,
+        "micro_f1": 0.7928653624856157,
+        "macro_f1": 0.6955858278405755,
+        "per_aspect_f1": {
+          "food": 0.7938144329896907,
+          "service": 0.8428835489833642,
+          "price": 0.7643312101910829,
+          "cleanliness": 0.5894736842105263,
+          "delivery": 0.7142857142857143,
+          "ambiance": 0.7860262008733624,
+          "app_experience": 0.8844621513944223,
+          "general": 0.7421383647798742,
+          "none": 0.14285714285714285
+        }
+      },
+      "sentiment_given_aspect": {
+        "num_overlap_aspect_instances": 689,
+        "coverage_over_gold_aspects": 0.8202380952380952,
+        "macro_f1": 0.6284821867085831,
+        "report": {
+          "negative": {
+            "precision": 0.8717948717948718,
+            "recall": 0.9036544850498339,
+            "f1-score": 0.8874388254486134,
+            "support": 301.0
+          },
+          "neutral": {
+            "precision": 0.25,
+            "recall": 0.05263157894736842,
+            "f1-score": 0.08695652173913043,
+            "support": 19.0
+          },
+          "positive": {
+            "precision": 0.9061662198391421,
+            "recall": 0.9159891598915989,
+            "f1-score": 0.9110512129380054,
+            "support": 369.0
+          },
+          "accuracy": 0.8867924528301887,
+          "macro avg": {
+            "precision": 0.6759870305446714,
+            "recall": 0.6240917412962671,
+            "f1-score": 0.6284821867085831,
+            "support": 689.0
+          },
+          "weighted avg": {
+            "precision": 0.8730560109301885,
+            "recall": 0.8867924528301887,
+            "f1-score": 0.8780103888928884,
+            "support": 689.0
+          }
+        }
+      },
+      "tuple": {
+        "num_reviews": 500,
+        "true_positive": 611,
+        "false_positive": 287,
+        "false_negative": 229,
+        "precision": 0.6804008908685969,
+        "recall": 0.7273809523809524,
+        "f1": 0.7031070195627158
+      }
+    }
+  },
+  {
+    "experiment": "exp_04_balanced_stronger_regularization",
+    "normalize_profile": "balanced",
+    "train_seconds": 43.46,
+    "aspect_train": {
+      "metrics": {
+        "micro_f1": 0.7990867579908676,
+        "macro_f1": 0.7209828272109973
+      },
+      "slice_metrics": {
+        "platform": {
+          "google_maps": {
+            "micro_f1": 0.78719723183391,
+            "macro_f1": 0.5961500283006463,
+            "count": 312
+          },
+          "play_store": {
+            "micro_f1": 0.8221476510067114,
+            "macro_f1": 0.47614934657336544,
+            "count": 188
+          }
+        },
+        "length_bucket": {
+          "short": {
+            "micro_f1": 0.77882797731569,
+            "macro_f1": 0.6621087517055377,
+            "count": 213
+          },
+          "medium": {
+            "micro_f1": 0.7967479674796748,
+            "macro_f1": 0.7084242258370634,
+            "count": 221
+          },
+          "long": {
+            "micro_f1": 0.8342541436464088,
+            "macro_f1": 0.638560800752852,
+            "count": 66
+          }
+        },
+        "aspects_per_review": {
+          "1": {
+            "micro_f1": 0.7378640776699029,
+            "macro_f1": 0.5140366865887641,
+            "count": 273
+          },
+          "3+": {
+            "micro_f1": 0.864406779661017,
+            "macro_f1": 0.6584760834197341,
+            "count": 94
+          },
+          "2": {
+            "micro_f1": 0.7977941176470589,
+            "macro_f1": 0.6023257175734426,
+            "count": 133
+          }
+        }
+      },
+      "ensemble": {
+        "linear_weight": 1.0,
+        "transformer_weight": 0.0
+      }
+    },
+    "sentiment_train": {
+      "run_utc": "2026-04-24T15:43:34.959931+00:00",
+      "train_csv": "data/DeepX_train.csv",
+      "validation_csv": "data/DeepX_validation.csv",
+      "model_path": "artifacts/improvements/exp_04_balanced_stronger_regularization/sentiment_model/sentiment_model.joblib",
+      "train": {
+        "num_samples": 3333,
+        "num_unique_reviews": 1971,
+        "num_unique_aspects": 9,
+        "macro_f1": 0.8985759795012921,
+        "report": {
+          "negative": {
+            "precision": 0.971198928332217,
+            "recall": 0.9427828348504551,
+            "f1-score": 0.9567799406136589,
+            "support": 1538.0
+          },
+          "neutral": {
+            "precision": 0.6604651162790698,
+            "recall": 0.9530201342281879,
+            "f1-score": 0.7802197802197802,
+            "support": 149.0
+          },
+          "positive": {
+            "precision": 0.9649230769230769,
+            "recall": 0.9526123936816525,
+            "f1-score": 0.9587282176704371,
+            "support": 1646.0
+          },
+          "accuracy": 0.948094809480948,
+          "macro avg": {
+            "precision": 0.8655290405114546,
+            "recall": 0.9494717875867651,
+            "f1-score": 0.8985759795012921,
+            "support": 3333.0
+          },
+          "weighted avg": {
+            "precision": 0.9542084124560203,
+            "recall": 0.948094809480948,
+            "f1-score": 0.9498490675673851,
+            "support": 3333.0
+          }
+        }
+      },
+      "validation": {
+        "num_samples": 840,
+        "num_unique_reviews": 500,
+        "num_unique_aspects": 9,
+        "macro_f1": 0.7134213775701937,
+        "report": {
+          "negative": {
+            "precision": 0.8571428571428571,
+            "recall": 0.8907563025210085,
+            "f1-score": 0.8736263736263736,
+            "support": 357.0
+          },
+          "neutral": {
+            "precision": 0.48,
+            "recall": 0.3,
+            "f1-score": 0.36923076923076925,
+            "support": 40.0
+          },
+          "positive": {
+            "precision": 0.8963963963963963,
+            "recall": 0.8984198645598194,
+            "f1-score": 0.8974069898534386,
+            "support": 443.0
+          },
+          "accuracy": 0.8666666666666667,
+          "macro avg": {
+            "precision": 0.7445130845130845,
+            "recall": 0.6963920556936092,
+            "f1-score": 0.7134213775701937,
+            "support": 840.0
+          },
+          "weighted avg": {
+            "precision": 0.8598852423852422,
+            "recall": 0.8666666666666667,
+            "f1-score": 0.8621489793558564,
+            "support": 840.0
+          }
+        }
+      }
+    },
+    "validation_metrics": {
+      "aspect_detection": {
+        "num_reviews": 500,
+        "micro_f1": 0.792,
+        "macro_f1": 0.695132761201886,
+        "per_aspect_f1": {
+          "food": 0.7938144329896907,
+          "service": 0.8450184501845018,
+          "price": 0.7643312101910829,
+          "cleanliness": 0.5904761904761905,
+          "delivery": 0.7070707070707071,
+          "ambiance": 0.7860262008733624,
+          "app_experience": 0.8844621513944223,
+          "general": 0.7421383647798742,
+          "none": 0.14285714285714285
+        }
+      },
+      "sentiment_given_aspect": {
+        "num_overlap_aspect_instances": 693,
+        "coverage_over_gold_aspects": 0.825,
+        "macro_f1": 0.6222074386010108,
+        "report": {
+          "negative": {
+            "precision": 0.8717948717948718,
+            "recall": 0.9036544850498339,
+            "f1-score": 0.8874388254486134,
+            "support": 301.0
+          },
+          "neutral": {
+            "precision": 0.09090909090909091,
+            "recall": 0.05263157894736842,
+            "f1-score": 0.06666666666666667,
+            "support": 19.0
+          },
+          "positive": {
+            "precision": 0.9162162162162162,
+            "recall": 0.9088471849865952,
+            "f1-score": 0.9125168236877523,
+            "support": 373.0
+          },
+          "accuracy": 0.8831168831168831,
+          "macro avg": {
+            "precision": 0.6263067263067263,
+            "recall": 0.6217110829945992,
+            "f1-score": 0.6222074386010108,
+            "support": 693.0
+          },
+          "weighted avg": {
+            "precision": 0.8742946288400834,
+            "recall": 0.8831168831168831,
+            "f1-score": 0.8784336628603622,
+            "support": 693.0
+          }
+        }
+      },
+      "tuple": {
+        "num_reviews": 500,
+        "true_positive": 612,
+        "false_positive": 298,
+        "false_negative": 228,
+        "precision": 0.6725274725274726,
+        "recall": 0.7285714285714285,
+        "f1": 0.6994285714285715
+      }
+    }
+  }
+]
