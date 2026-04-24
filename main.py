@@ -23,10 +23,11 @@ def main(argv: list[str] | None = None) -> int:
         print("NU Arabic ABSA utility CLI")
         print("Usage: main.py <command>")
         print("Commands:")
-        print("  train-aspect      Train Path A aspect detection models")
-        print("  train-sentiment   Train Path B aspect-conditioned sentiment model")
-        print("  predict           Run end-to-end inference (Path A + Path B)")
-        print("  evaluate          Evaluate predictions against validation set")
+        print("  train-aspect        Train Path A aspect detection models")
+        print("  train-sentiment     Train Path B aspect-conditioned sentiment model")
+        print("  predict             Run end-to-end inference (Path A + Path B)")
+        print("  evaluate            Evaluate predictions against validation set")
+        print("  semi-supervised     Train with pseudo-labeling on unlabeled data")
         return 0
 
     command = argv[0]
@@ -46,6 +47,11 @@ def main(argv: list[str] | None = None) -> int:
 
     if command == "evaluate":
         return _run_evaluate(argv[1:])
+
+    if command == "semi-supervised":
+        import importlib
+        train_module = importlib.import_module("absa.training.semi_supervised")
+        return train_module.main()
 
     print(f"Unknown command: {command}")
     return 1
