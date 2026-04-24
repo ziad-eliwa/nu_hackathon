@@ -31,9 +31,9 @@ def _find_best_blend_weight(
     linear_probs: np.ndarray,
     transformer_probs: np.ndarray,
 ) -> float:
-    best_weight = 0.65
+    best_weight = 0.75
     best_score = -1.0
-    for weight in np.linspace(0.0, 1.0, 9):
+    for weight in np.linspace(0.5, 1.0, 11):
         blended = weight * linear_probs + (1.0 - weight) * transformer_probs
         score = f1_score(y_true, (blended >= 0.5).astype(int), average="micro", zero_division=0)
         if score > best_score:

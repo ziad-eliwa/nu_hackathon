@@ -124,6 +124,33 @@ def pseudo_label_unlabeled_data(
     print("Loading unlabeled data...")
     df = load_unlabeled_data(unlabeled_csv)
     
+    return pseudo_label_from_dataframe(aspect_model, sentiment_model, settings, df, confidence_threshold)
+
+
+def pseudo_label_unlabeled_data_iteration(
+    df: pd.DataFrame,
+    remaining_indices: set,
+    confidence_threshold: float = 0.85,
+) -> tuple[list[LabeledReviewRecord], dict]:
+    print("Loading models for pseudo-labeling...")
+    
+    aspect_model = AspectEnsemblePredictor.load_from_artifacts("artifacts")
+    sentiment_model = AspectConditionedSentimentModel.load("artifacts/sentiment_model/sentiment_model.joblib")
+    settings = InferenceSettings.from_threshold_file("artifacts/calibration/aspect_thresholds.json")
+    
+    filtered_df = df.loc[list(remaining_indices)]
+    print(f"Processing {len(filtered_df)} remaining unlabeled reviews...")
+    
+    return pseudo_label_from_dataframe(aspect_model, sentiment_model, settings, filtered_df, confidence_threshold)
+
+
+def pseudo_label_from_dataframe(
+    aspect_model: AspectEnsemblePredictor,
+    sentiment_model: AspectConditionedSentimentModel,
+    settings: InferenceSettings,
+    df: pd.DataFrame,
+    confidence_threshold: float,
+) -> tuple[list[LabeledReviewRecord], dict]:
     reviews = [
         ReviewInput(
             review_id=str(row["review_id"]),
@@ -183,15 +210,19 @@ def retrain_with_pseudo_labels(
     train_csv: str,
     validation_csv: str,
     pseudo_records: list[LabeledReviewRecord],
+    use_existing_pseudo: bool = False,
 ) -> dict:
-    print("Loading original training data...")
+    print("Loading training data...")
     train_records = load_labeled_reviews(train_csv)
     val_records = load_labeled_reviews(validation_csv)
     
+    if use_existing_pseudo and pseudo_records:
+        combined_records = train_records + pseudo_records
+    else:
+        combined_records = train_records + pseudo_records
+    
     print(f"Original training: {len(train_records)} samples")
     print(f"Adding {len(pseudo_records)} pseudo-labeled samples")
-    
-    combined_records = train_records + pseudo_records
     print(f"Combined training: {len(combined_records)} samples")
     
     y_train = labels_matrix(combined_records)
@@ -252,30 +283,63 @@ def run_semi_supervised_training(
     validation_csv: str,
     unlabeled_csv: str,
     confidence_threshold: float = 0.85,
+    iterations: int = 2,
 ) -> dict:
-    pseudo_records, stats = pseudo_label_unlabeled_data(
-        unlabeled_csv, confidence_threshold
-    )
+    all_iteration_stats = []
+    all_pseudo_records = []
     
-    if pseudo_records:
+    df = load_unlabeled_data(unlabeled_csv)
+    remaining_indices = set(df.index)
+    
+    for iteration in range(1, iterations + 1):
+        print(f"\n{'='*50}")
+        print(f"ITERATION {iteration}/{iterations}")
+        print(f"{'='*50}")
+        
+        combined_train = load_labeled_reviews(train_csv) + all_pseudo_records
+        print(f"Training with {len(combined_train)} samples (original + pseudo-labels)")
+        
+        print("\n--- Retraining aspect models ---")
         aspect_metrics = retrain_with_pseudo_labels(
-            train_csv, validation_csv, pseudo_records
+            train_csv, validation_csv, all_pseudo_records, use_existing_pseudo=True
         )
-    else:
-        print("No pseudo-labels generated, skipping retraining")
-        aspect_metrics = {}
+        
+        print("\n--- Retraining sentiment model ---")
+        from absa.training.train_sentiment import train_and_evaluate_sentiment
+        sentiment_summary = train_and_evaluate_sentiment(
+            train_csv=train_csv,
+            validation_csv=validation_csv,
+            output_dir="artifacts/sentiment_model",
+        )
+        
+        print("\n--- Generating new pseudo-labels ---")
+        new_pseudo_records, stats = pseudo_label_unlabeled_data_iteration(
+            df, list(remaining_indices), confidence_threshold
+        )
+        
+        print(f"Generated {len(new_pseudo_records)} new high-confidence samples")
+        
+        all_iteration_stats.append({
+            "iteration": iteration,
+            "pseudo_label_stats": stats,
+            "aspect_metrics": aspect_metrics,
+            "sentiment_macro_f1": sentiment_summary["validation"]["macro_f1"],
+        })
+        
+        all_pseudo_records.extend(new_pseudo_records)
+        
+        new_ids = {r.review_id for r in new_pseudo_records}
+        remaining_indices = remaining_indices - new_ids
+        
+        if iteration < iterations:
+            print(f"\nRemaining unlabeled samples: {len(remaining_indices)}")
     
-    print("\n--- Retraining sentiment model ---")
-    sentiment_summary = train_and_evaluate_sentiment(
-        train_csv=train_csv,
-        validation_csv=validation_csv,
-        output_dir="artifacts/sentiment_model",
-    )
+    eval_results = evaluate_on_validation(validation_csv, "predictions_after_semisupervised.json")
     
     return {
-        "pseudo_label_stats": stats,
-        "aspect_metrics": aspect_metrics,
-        "sentiment_metrics": sentiment_summary,
+        "iterations": all_iteration_stats,
+        "total_pseudo_labels": len(all_pseudo_records),
+        "evaluation": eval_results,
     }
 
 
@@ -342,6 +406,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--validation-csv", default=str(defaults.validation_csv))
     parser.add_argument("--unlabeled-csv", default=str(defaults.unlabeled_csv))
     parser.add_argument("--confidence-threshold", type=float, default=0.85)
+    parser.add_argument("--iterations", type=int, default=2, help="Number of semi-supervised iterations")
     parser.add_argument("--output-json", default="predictions_after_semisupervised.json")
     return parser
 
@@ -355,20 +420,16 @@ def main() -> None:
         validation_csv=args.validation_csv,
         unlabeled_csv=args.unlabeled_csv,
         confidence_threshold=args.confidence_threshold,
+        iterations=args.iterations,
     )
     
-    print("\n--- Pseudo-labeling stats ---")
-    print(json.dumps(result["pseudo_label_stats"], indent=2))
-    
-    print("\n--- Aspect metrics after retraining ---")
-    print(json.dumps(result["aspect_metrics"], indent=2))
-    
-    print("\n--- Sentiment metrics after retraining ---")
-    print(f"Validation macro-F1: {result['sentiment_metrics']['validation']['macro_f1']:.4f}")
-    
-    print("\n--- Evaluating on validation set ---")
-    eval_results = evaluate_on_validation(args.validation_csv, args.output_json)
-    print(json.dumps(eval_results, indent=2))
+    print("\n" + "="*60)
+    print("FINAL RESULTS AFTER SEMI-SUPERVISED LEARNING")
+    print("="*60)
+    print(f"\nIterations: {args.iterations}")
+    print(f"Total pseudo-labels used: {result['total_pseudo_labels']}")
+    print(f"\nEvaluation on validation set:")
+    print(json.dumps(result['evaluation'], indent=2))
     
     print(f"\nPredictions saved to {args.output_json}")
 

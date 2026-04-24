@@ -14,35 +14,72 @@ def optimize_aspect_thresholds(
     y_true: np.ndarray,
     y_prob: np.ndarray,
     aspects: tuple[str, ...] = ASPECTS,
+    none_focus: bool = True,
 ) -> dict[str, float]:
     if y_true.shape != y_prob.shape:
         raise ValueError("y_true and y_prob must have the same shape")
     thresholds: dict[str, float] = {}
     candidates = np.linspace(0.1, 0.9, 17)
+    
+    none_idx = aspects.index("none") if "none" in aspects else None
+    
     for idx, aspect in enumerate(aspects):
         best_score = -1.0
         best_threshold = 0.5
-        for threshold in candidates:
-            pred = (y_prob[:, idx] >= threshold).astype(int)
-            score = f1_score(y_true[:, idx], pred, zero_division=0)
-            if score > best_score or (score == best_score and abs(threshold - 0.5) < abs(best_threshold - 0.5)):
-                best_score = score
-                best_threshold = threshold
+        
+        aspect_true = y_true[:, idx]
+        aspect_has_positive = aspect_true.sum() > 0
+        
+        if not aspect_has_positive:
+            thresholds[aspect] = 0.5
+            continue
+        
+        if none_focus and aspect == "none" and none_idx is not None:
+            none_candidates = np.linspace(0.05, 0.5, 10)
+            for threshold in none_candidates:
+                pred = (y_prob[:, idx] >= threshold).astype(int)
+                score = f1_score(y_true[:, idx], pred, zero_division=0)
+                if score > best_score:
+                    best_score = score
+                    best_threshold = threshold
+        else:
+            for threshold in candidates:
+                pred = (y_prob[:, idx] >= threshold).astype(int)
+                score = f1_score(y_true[:, idx], pred, zero_division=0)
+                if score > best_score or (score == best_score and abs(threshold - 0.5) < abs(best_threshold - 0.5)):
+                    best_score = score
+                    best_threshold = threshold
+        
         thresholds[aspect] = float(best_threshold)
+    
+    if none_focus and none_idx is not None:
+        thresholds["none"] = max(0.15, thresholds.get("none", 0.5) * 0.8)
+    
     return thresholds
 
 
 def apply_thresholds(
     prob_map: dict[str, float],
     thresholds: dict[str, float],
-    fallback_none_threshold: float = 0.6,
+    fallback_none_threshold: float = 0.3,
     fallback_general_threshold: float = 0.55,
+    none_aggressive: bool = True,
 ) -> list[str]:
     selected = [aspect for aspect, prob in prob_map.items() if prob >= thresholds.get(aspect, 0.5)]
+    
+    if none_aggressive:
+        none_prob = prob_map.get("none", 0.0)
+        concrete_probs = {a: prob_map.get(a, 0.0) for a in ASPECTS if a != "none"}
+        max_concrete_prob = max(concrete_probs.values()) if concrete_probs else 0.0
+        
+        if none_prob > max_concrete_prob * 1.2:
+            return ["none"]
+    
     if "none" in selected and len(selected) > 1:
         selected = [aspect for aspect in selected if aspect != "none"]
     if selected:
         return ordered_aspects(selected)
+    
     none_prob = prob_map.get("none", 0.0)
     general_prob = prob_map.get("general", 0.0)
     if none_prob >= fallback_none_threshold:

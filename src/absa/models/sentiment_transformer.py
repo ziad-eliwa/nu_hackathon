@@ -1,64 +1,59 @@
-"""Aspect-conditioned sentiment model.
+"""Aspect-conditioned sentiment model using neural network with PyTorch.
 
-Why this file is named `sentiment_transformer`:
-- The architecture target for Path B is a transformer sentiment model.
-- This implementation provides a drop-in baseline API (TF-IDF + Logistic)
-  so the pipeline is operational now and can later be upgraded to AraBERT
-  without changing the rest of Path B.
+Two hidden layer MLP for sentiment classification with spell correction.
 """
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Sequence
 
 import joblib
+import numpy as np
 import pandas as pd
+import torch
+import torch.nn as nn
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import LogisticRegression
-from sklearn.pipeline import Pipeline
+from torch.utils.data import DataLoader, TensorDataset
 
-from absa.config.taxonomy import SENTIMENT_LABELS, is_valid_sentiment
+from absa.config.taxonomy import SENTIMENT_LABELS, SENTIMENT_TO_ID, is_valid_sentiment
 from absa.data.schemas import parse_aspect_sentiments_raw
+from absa.preprocess.normalize import normalize_text
 
 
 def build_aspect_conditioned_text(review_text: str, aspect: str) -> str:
-    """Build one model input that conditions sentiment on an aspect.
-
-    We mimic transformer-style paired input by appending the aspect with a
-    special separator token marker.
-    """
+    """Build one model input that conditions sentiment on an aspect."""
     review_text = str(review_text).strip()
     aspect = str(aspect).strip().lower()
     return f"{review_text} [ASPECT] {aspect}"
+
+
+def normalize_and_correct_text(text: str) -> str:
+    """Apply normalization and spell correction to text."""
+    return normalize_text(text, apply_spell_correction=True)
 
 
 def build_training_examples_from_dataframe(
     df: pd.DataFrame,
     text_col: str = "review_text",
     aspect_sentiments_col: str = "aspect_sentiments",
+    correct_spelling: bool = False,
 ) -> tuple[list[str], list[str], list[str], list[str]]:
-    """Explode review rows into aspect-conditioned sentiment training samples.
-
-    Returns:
-        conditioned_texts: model inputs
-        labels: sentiment labels
-        review_ids: review IDs for traceability
-        aspects: aspects aligned to each sample
-    """
+    """Explode review rows into aspect-conditioned sentiment training samples."""
     conditioned_texts: list[str] = []
     labels: list[str] = []
     review_ids: list[str] = []
     aspects: list[str] = []
 
-    # Iterate row-by-row because each row can contain multiple aspect labels.
     for row in df.to_dict(orient="records"):
         review_text = str(row.get(text_col, "")).strip()
+        if correct_spelling:
+            review_text = normalize_and_correct_text(review_text)
         review_id = str(row.get("review_id", "")).strip()
         sentiment_map = parse_aspect_sentiments_raw(row.get(aspect_sentiments_col))
 
-        # One review contributes one sample per labeled aspect sentiment.
         for aspect, sentiment in sentiment_map.items():
             if not is_valid_sentiment(sentiment):
                 continue
@@ -71,72 +66,126 @@ def build_training_examples_from_dataframe(
     return conditioned_texts, labels, review_ids, aspects
 
 
+class SentimentMLP(nn.Module):
+    """Two-layer MLP for sentiment classification."""
+    
+    def __init__(self, input_dim: int, hidden_dim: int = 256, num_classes: int = 3, dropout: float = 0.3):
+        super().__init__()
+        self.network = nn.Sequential(
+            nn.Linear(input_dim, hidden_dim),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+            nn.Linear(hidden_dim, hidden_dim // 2),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+            nn.Linear(hidden_dim // 2, num_classes),
+        )
+    
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return self.network(x)
+
+
 @dataclass(slots=True)
 class AspectConditionedSentimentModel:
-    """Trainable sentiment model with a stable interface for inference.
-
-    Notes:
-    - The `pipeline` can be replaced by a transformer encoder in future.
-    - We keep `predict` and `predict_many` methods stable for Path B integration.
-    """
+    """Neural network sentiment model with PyTorch."""
 
     max_features: int = 60000
     min_df: int = 2
     ngram_range: tuple[int, int] = (3, 5)
     random_state: int = 42
+    hidden_dim: int = 256
+    epochs: int = 30
+    batch_size: int = 64
+    learning_rate: float = 0.001
+    dropout: float = 0.3
+    correct_spelling: bool = False
+    
+    _vectorizer: TfidfVectorizer | None = field(init=False, default=None)
+    _model: SentimentMLP | None = field(init=False, default=None)
+    _device: str = field(init=False, default="cpu")
     _single_label: str | None = field(init=False, default=None)
-    _pipeline: Pipeline | None = field(init=False, default=None)
 
     def __post_init__(self) -> None:
-        self._pipeline: Pipeline | None = Pipeline(
-            steps=[
-                (
-                    "vectorizer",
-                    TfidfVectorizer(
-                        analyzer="char_wb",
-                        ngram_range=self.ngram_range,
-                        min_df=self.min_df,
-                        max_features=self.max_features,
-                    ),
-                ),
-                (
-                    "classifier",
-                    LogisticRegression(
-                        max_iter=400,
-                        class_weight="balanced",
-                        random_state=self.random_state,
-                    ),
-                ),
-            ]
+        self._device = "cuda" if torch.cuda.is_available() else "cpu"
+        self._vectorizer = TfidfVectorizer(
+            analyzer="char_wb",
+            ngram_range=self.ngram_range,
+            min_df=self.min_df,
+            max_features=self.max_features,
         )
 
+    def _build_model(self, input_dim: int) -> SentimentMLP:
+        return SentimentMLP(
+            input_dim=input_dim,
+            hidden_dim=self.hidden_dim,
+            num_classes=len(SENTIMENT_LABELS),
+            dropout=self.dropout,
+        ).to(self._device)
+
     def fit(self, conditioned_texts: Sequence[str], labels: Sequence[str]) -> None:
-        """Fit model on already prepared aspect-conditioned texts."""
+        """Train the neural network on aspect-conditioned texts."""
         if not conditioned_texts:
             raise ValueError("Cannot train sentiment model on empty training data")
 
         normalized_labels = [str(label).strip().lower() for label in labels]
         unique_labels = sorted(set(normalized_labels))
 
-        # Degenerate fallback: if dataset only has one class, avoid sklearn error.
         if len(unique_labels) == 1:
             self._single_label = unique_labels[0]
-            self._pipeline = None
+            self._model = None
             return
 
-        if self._pipeline is None:
-            raise RuntimeError("Pipeline is missing and no single-label fallback is set")
-
         self._single_label = None
-        self._pipeline.fit(list(conditioned_texts), normalized_labels)
+        
+        texts = list(conditioned_texts)
+        if self.correct_spelling:
+            texts = [normalize_and_correct_text(t) for t in texts]
+        
+        X = self._vectorizer.fit_transform(texts).toarray()
+        y = np.array([SENTIMENT_TO_ID[label] for label in normalized_labels])
+        
+        input_dim = X.shape[1]
+        self._model = self._build_model(input_dim)
+        
+        X_tensor = torch.FloatTensor(X)
+        y_tensor = torch.LongTensor(y)
+        
+        class_counts = np.bincount(y)
+        class_weights = 1.0 / (class_counts + 1)
+        class_weights = class_weights / class_weights.sum() * len(class_weights)
+        class_weights = torch.FloatTensor(class_weights).to(self._device)
+        
+        dataset = TensorDataset(X_tensor, y_tensor)
+        dataloader = DataLoader(dataset, batch_size=self.batch_size, shuffle=True)
+        
+        criterion = nn.CrossEntropyLoss(weight=class_weights)
+        optimizer = torch.optim.Adam(self._model.parameters(), lr=self.learning_rate)
+        
+        self._model.train()
+        for epoch in range(self.epochs):
+            for batch_X, batch_y in dataloader:
+                batch_X = batch_X.to(self._device)
+                batch_y = batch_y.to(self._device)
+                
+                optimizer.zero_grad()
+                outputs = self._model(batch_X)
+                loss = criterion(outputs, batch_y)
+                loss.backward()
+                optimizer.step()
+        
+        self._model.eval()
 
     def fit_from_dataframe(self, df: pd.DataFrame) -> None:
         """Convenience wrapper to train directly from labeled dataframe."""
-        texts, labels, _, _ = build_training_examples_from_dataframe(df)
+        texts, labels, _, _ = build_training_examples_from_dataframe(
+            df, correct_spelling=self.correct_spelling
+        )
         self.fit(texts, labels)
 
     def predict(self, review_text: str, aspect: str) -> str:
         """Predict sentiment for one (review, aspect) pair."""
+        if self.correct_spelling:
+            review_text = normalize_and_correct_text(review_text)
         conditioned = build_aspect_conditioned_text(review_text, aspect)
         return self.predict_conditioned_texts([conditioned])[0]
 
@@ -145,9 +194,13 @@ class AspectConditionedSentimentModel:
         if len(review_texts) != len(aspects):
             raise ValueError("review_texts and aspects must have same length")
 
+        texts = list(review_texts)
+        if self.correct_spelling:
+            texts = [normalize_and_correct_text(t) for t in texts]
+
         conditioned = [
             build_aspect_conditioned_text(text, aspect)
-            for text, aspect in zip(review_texts, aspects)
+            for text, aspect in zip(texts, aspects)
         ]
         return self.predict_conditioned_texts(conditioned)
 
@@ -156,14 +209,28 @@ class AspectConditionedSentimentModel:
         if self._single_label is not None:
             return [self._single_label for _ in conditioned_texts]
 
-        if self._pipeline is None:
+        if self._model is None or self._vectorizer is None:
             raise RuntimeError("Model is not fitted")
 
-        predictions = self._pipeline.predict(list(conditioned_texts))
-        return [str(prediction) for prediction in predictions]
+        texts = list(conditioned_texts)
+        if self.correct_spelling:
+            texts = [normalize_and_correct_text(t) for t in texts]
+
+        X = self._vectorizer.transform(texts).toarray()
+        X_tensor = torch.FloatTensor(X).to(self._device)
+        
+        self._model.eval()
+        with torch.no_grad():
+            outputs = self._model(X_tensor)
+            predictions = torch.argmax(outputs, dim=1).cpu().numpy()
+        
+        id_to_sentiment = {v: k for k, v in SENTIMENT_TO_ID.items()}
+        return [id_to_sentiment[int(pred)] for pred in predictions]
 
     def predict_proba(self, review_text: str, aspect: str) -> dict[str, float]:
         """Return sentiment probabilities as {label: probability}."""
+        if self.correct_spelling:
+            review_text = normalize_and_correct_text(review_text)
         conditioned = build_aspect_conditioned_text(review_text, aspect)
 
         if self._single_label is not None:
@@ -172,15 +239,23 @@ class AspectConditionedSentimentModel:
                 for label in SENTIMENT_LABELS
             }
 
-        if self._pipeline is None:
+        if self._model is None or self._vectorizer is None:
             raise RuntimeError("Model is not fitted")
 
-        probabilities = self._pipeline.predict_proba([conditioned])[0]
-        labels = [str(label) for label in self._pipeline.classes_]
+        texts = [conditioned]
+        if self.correct_spelling:
+            texts = [normalize_and_correct_text(t) for t in texts]
 
+        X = self._vectorizer.transform(texts).toarray()
+        X_tensor = torch.FloatTensor(X).to(self._device)
+        
+        self._model.eval()
+        with torch.no_grad():
+            probs = torch.softmax(self._model(X_tensor), dim=1).cpu().numpy()[0]
+        
         result = {label: 0.0 for label in SENTIMENT_LABELS}
-        for label, prob in zip(labels, probabilities):
-            result[label] = float(prob)
+        for idx, label in enumerate(SENTIMENT_LABELS):
+            result[label] = float(probs[idx])
         return result
 
     def save(self, output_path: str | Path) -> None:
@@ -193,9 +268,22 @@ class AspectConditionedSentimentModel:
             "min_df": self.min_df,
             "ngram_range": self.ngram_range,
             "random_state": self.random_state,
+            "hidden_dim": self.hidden_dim,
+            "epochs": self.epochs,
+            "batch_size": self.batch_size,
+            "learning_rate": self.learning_rate,
+            "dropout": self.dropout,
+            "correct_spelling": self.correct_spelling,
             "single_label": self._single_label,
-            "pipeline": self._pipeline,
         }
+
+        if self._vectorizer is not None:
+            payload["vectorizer"] = self._vectorizer
+        
+        if self._model is not None:
+            payload["model_state_dict"] = self._model.state_dict()
+            payload["input_dim"] = self._model.network[0].in_features
+
         joblib.dump(payload, path)
 
     @classmethod
@@ -208,7 +296,20 @@ class AspectConditionedSentimentModel:
             min_df=int(payload["min_df"]),
             ngram_range=tuple(payload["ngram_range"]),
             random_state=int(payload["random_state"]),
+            hidden_dim=int(payload.get("hidden_dim", 256)),
+            epochs=int(payload.get("epochs", 30)),
+            batch_size=int(payload.get("batch_size", 64)),
+            learning_rate=float(payload.get("learning_rate", 0.001)),
+            dropout=float(payload.get("dropout", 0.3)),
+            correct_spelling=bool(payload.get("correct_spelling", False)),
         )
-        model._single_label = payload["single_label"]
-        model._pipeline = payload["pipeline"]
+        
+        model._single_label = payload.get("single_label")
+        model._vectorizer = payload.get("vectorizer")
+        
+        if "model_state_dict" in payload:
+            model._model = model._build_model(int(payload["input_dim"]))
+            model._model.load_state_dict(payload["model_state_dict"])
+            model._model.eval()
+        
         return model

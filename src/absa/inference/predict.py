@@ -111,13 +111,37 @@ class ABSAPredictor:
         self.aspect_provider = aspect_provider
         self.settings = settings or InferenceSettings()
 
-    def _select_aspects(self, aspect_probs: Mapping[str, float]) -> list[str]:
+    def _is_short_text(self, text: str) -> bool:
+        word_count = len(text.split())
+        return word_count <= 3
+
+    def _is_mixed_sentiment(self, text: str) -> bool:
+        positive_indicators = ['جميل', 'ممتاز', 'عظيم', 'م沂好', 'حب', 'رائع', 'GOOD', 'great', 'love', 'excellent', '👍', '❤', '⭐']
+        negative_indicators = ['سيء', 'فظيع', 'مزعج', ' плохо', 'BAD', 'terrible', 'hate', 'worst', '👎', '😡']
+        
+        text_lower = text.lower()
+        pos_count = sum(1 for w in positive_indicators if w in text_lower)
+        neg_count = sum(1 for w in negative_indicators if w in text_lower)
+        
+        return pos_count > 0 and neg_count > 0
+
+    def _select_aspects(self, aspect_probs: Mapping[str, float], review_text: str = "") -> list[str]:
         """Convert probability map into final aspect list with calibrated rules."""
         normalized_probs = {
             aspect: float(aspect_probs.get(aspect, 0.0)) for aspect in ASPECT_TAXONOMY
         }
 
-        # Select concrete aspects using per-aspect thresholds.
+        is_short = self._is_short_text(review_text) if review_text else False
+        is_mixed = self._is_mixed_sentiment(review_text) if review_text else False
+
+        if is_short and review_text:
+            word_count = len(review_text.split())
+            if word_count <= 2:
+                none_prob = normalized_probs.get(NONE_ASPECT, 0)
+                general_prob = normalized_probs.get("general", 0)
+                if none_prob > 0.3 or general_prob > 0.4:
+                    return [NONE_ASPECT] if none_prob > general_prob else ["general"]
+
         selected_non_none = [
             aspect
             for aspect in ASPECT_TAXONOMY
@@ -126,18 +150,14 @@ class ABSAPredictor:
         ]
 
         if selected_non_none:
-            # By default, suppress none if concrete aspects are present.
             return selected_non_none
 
-        # If no concrete aspect passed threshold, check none threshold.
         if normalized_probs[NONE_ASPECT] >= self.settings.threshold_for(NONE_ASPECT):
             return [NONE_ASPECT]
 
-        # Deterministic fallback for empty predictions.
         if self.settings.fallback_aspect in ASPECT_TAXONOMY:
             return [self.settings.fallback_aspect]
 
-        # Last-resort fallback should never happen, but keep pipeline safe.
         return [NONE_ASPECT]
 
     def predict_reviews(self, reviews: Sequence[ReviewInput]) -> list[PredictionRecord]:
@@ -150,9 +170,8 @@ class ABSAPredictor:
 
         outputs: list[PredictionRecord] = []
 
-        # Predict each review independently to keep debugging straightforward.
         for review, aspect_probs in zip(reviews, aspect_prob_list):
-            chosen_aspects = self._select_aspects(aspect_probs)
+            chosen_aspects = self._select_aspects(aspect_probs, review.review_text)
 
             sentiment_map: dict[str, str] = {}
             for aspect in chosen_aspects:

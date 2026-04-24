@@ -1,16 +1,16 @@
 {
   "version": "path-a-v1",
-  "created_at": "2026-04-24T12:20:34.937731+00:00",
+  "created_at": "2026-04-24T14:37:14.789364+00:00",
   "thresholds": {
-    "food": 0.8,
-    "service": 0.5,
+    "food": 0.65,
+    "service": 0.35,
     "price": 0.5,
     "cleanliness": 0.5,
     "delivery": 0.6,
     "ambiance": 0.6,
-    "app_experience": 0.45000000000000007,
-    "general": 0.65,
-    "none": 0.6
+    "app_experience": 0.65,
+    "general": 0.45000000000000007,
+    "none": 0.4
   },
   "fallback_policy": {
     "none_threshold": 0.6,

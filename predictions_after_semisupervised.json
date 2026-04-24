@@ -55,9 +55,11 @@
   {
     "review_id": "4277",
     "aspects": [
+      "food",
       "service"
     ],
     "aspect_sentiments": {
+      "food": "positive",
       "service": "positive"
     }
   },
@@ -65,10 +67,12 @@
     "review_id": "1957",
     "aspects": [
       "food",
+      "service",
       "ambiance"
     ],
     "aspect_sentiments": {
       "food": "positive",
+      "service": "positive",
       "ambiance": "positive"
     }
   },
@@ -130,10 +134,12 @@
   {
     "review_id": "7042",
     "aspects": [
-      "service"
+      "service",
+      "app_experience"
     ],
     "aspect_sentiments": {
-      "service": "positive"
+      "service": "positive",
+      "app_experience": "positive"
     }
   },
   {
@@ -223,10 +229,12 @@
   {
     "review_id": "1479",
     "aspects": [
-      "general"
+      "food",
+      "service"
     ],
     "aspect_sentiments": {
-      "general": "positive"
+      "food": "positive",
+      "service": "negative"
     }
   },
   {
@@ -241,10 +249,10 @@
   {
     "review_id": "7382",
     "aspects": [
-      "service"
+      "none"
     ],
     "aspect_sentiments": {
-      "service": "positive"
+      "none": "neutral"
     }
   },
   {
@@ -274,12 +282,10 @@
   {
     "review_id": "5365",
     "aspects": [
-      "service",
-      "ambiance"
+      "service"
     ],
     "aspect_sentiments": {
-      "service": "positive",
-      "ambiance": "positive"
+      "service": "positive"
     }
   },
   {
@@ -305,16 +311,27 @@
   {
     "review_id": "3732",
     "aspects": [
+      "food",
       "service",
       "ambiance"
     ],
     "aspect_sentiments": {
+      "food": "positive",
       "service": "positive",
       "ambiance": "positive"
     }
   },
   {
     "review_id": "5701",
+    "aspects": [
+      "service"
+    ],
+    "aspect_sentiments": {
+      "service": "positive"
+    }
+  },
+  {
+    "review_id": "5390",
     "aspects": [
       "service",
       "cleanliness"
@@ -325,21 +342,18 @@
     }
   },
   {
-    "review_id": "5390",
-    "aspects": [
-      "service"
-    ],
-    "aspect_sentiments": {
-      "service": "positive"
-    }
-  },
-  {
     "review_id": "5148",
     "aspects": [
-      "service"
+      "service",
+      "price",
+      "cleanliness",
+      "ambiance"
     ],
     "aspect_sentiments": {
-      "service": "positive"
+      "service": "positive",
+      "price": "positive",
+      "cleanliness": "positive",
+      "ambiance": "positive"
     }
   },
   {
@@ -350,7 +364,7 @@
     ],
     "aspect_sentiments": {
       "food": "positive",
-      "cleanliness": "positive"
+      "cleanliness": "negative"
     }
   },
   {
@@ -410,9 +424,9 @@
       "app_experience"
     ],
     "aspect_sentiments": {
-      "service": "negative",
+      "service": "positive",
       "delivery": "negative",
-      "app_experience": "negative"
+      "app_experience": "positive"
     }
   },
   {
@@ -427,10 +441,10 @@
   {
     "review_id": "9119",
     "aspects": [
-      "app_experience"
+      "none"
     ],
     "aspect_sentiments": {
-      "app_experience": "negative"
+      "none": "neutral"
     }
   },
   {
@@ -447,12 +461,14 @@
   {
     "review_id": "9687",
     "aspects": [
+      "service",
       "price",
       "app_experience"
     ],
     "aspect_sentiments": {
-      "price": "neutral",
-      "app_experience": "neutral"
+      "service": "negative",
+      "price": "negative",
+      "app_experience": "negative"
     }
   },
   {
@@ -482,10 +498,10 @@
   {
     "review_id": "9258",
     "aspects": [
-      "app_experience"
+      "none"
     ],
     "aspect_sentiments": {
-      "app_experience": "negative"
+      "none": "neutral"
     }
   },
   {
@@ -518,19 +534,21 @@
   {
     "review_id": "9502",
     "aspects": [
-      "app_experience"
+      "none"
     ],
     "aspect_sentiments": {
-      "app_experience": "positive"
+      "none": "neutral"
     }
   },
   {
     "review_id": "5771",
     "aspects": [
-      "service"
+      "service",
+      "ambiance"
     ],
     "aspect_sentiments": {
-      "service": "positive"
+      "service": "positive",
+      "ambiance": "positive"
     }
   },
   {
@@ -574,10 +592,12 @@
   {
     "review_id": "5022",
     "aspects": [
-      "food"
+      "food",
+      "service"
     ],
     "aspect_sentiments": {
-      "food": "negative"
+      "food": "negative",
+      "service": "negative"
     }
   },
   {
@@ -597,28 +617,28 @@
     ],
     "aspect_sentiments": {
       "delivery": "negative",
-      "app_experience": "negative"
+      "app_experience": "positive"
     }
   },
   {
     "review_id": "658",
     "aspects": [
       "food",
-      "service",
-      "ambiance"
+      "service"
     ],
     "aspect_sentiments": {
       "food": "positive",
-      "service": "positive",
-      "ambiance": "positive"
+      "service": "negative"
     }
   },
   {
     "review_id": "4562",
     "aspects": [
+      "food",
       "price"
     ],
     "aspect_sentiments": {
+      "food": "positive",
       "price": "negative"
     }
   },
@@ -626,13 +646,11 @@
     "review_id": "1148",
     "aspects": [
       "food",
-      "service",
-      "cleanliness"
+      "service"
     ],
     "aspect_sentiments": {
       "food": "positive",
-      "service": "positive",
-      "cleanliness": "positive"
+      "service": "positive"
     }
   },
   {
@@ -672,10 +690,12 @@
     "review_id": "504",
     "aspects": [
       "food",
+      "service",
       "price"
     ],
     "aspect_sentiments": {
       "food": "neutral",
+      "service": "neutral",
       "price": "neutral"
     }
   },
@@ -704,21 +724,29 @@
     "aspects": [
       "food",
       "service",
-      "price"
+      "price",
+      "delivery"
     ],
     "aspect_sentiments": {
       "food": "negative",
       "service": "negative",
-      "price": "negative"
+      "price": "negative",
+      "delivery": "negative"
     }
   },
   {
     "review_id": "6071",
     "aspects": [
-      "food"
+      "food",
+      "service",
+      "price",
+      "cleanliness"
     ],
     "aspect_sentiments": {
-      "food": "negative"
+      "food": "negative",
+      "service": "negative",
+      "price": "negative",
+      "cleanliness": "negative"
     }
   },
   {
@@ -726,13 +754,11 @@
     "aspects": [
       "food",
       "service",
-      "cleanliness",
       "ambiance"
     ],
     "aspect_sentiments": {
       "food": "positive",
       "service": "positive",
-      "cleanliness": "positive",
       "ambiance": "positive"
     }
   },
@@ -741,13 +767,11 @@
     "aspects": [
       "food",
       "service",
-      "price",
       "ambiance"
     ],
     "aspect_sentiments": {
       "food": "negative",
       "service": "negative",
-      "price": "negative",
       "ambiance": "negative"
     }
   },
@@ -763,11 +787,13 @@
   {
     "review_id": "6531",
     "aspects": [
+      "service",
       "price",
       "delivery",
       "app_experience"
     ],
     "aspect_sentiments": {
+      "service": "negative",
       "price": "negative",
       "delivery": "negative",
       "app_experience": "negative"
@@ -776,10 +802,10 @@
   {
     "review_id": "6194",
     "aspects": [
-      "general"
+      "service"
     ],
     "aspect_sentiments": {
-      "general": "neutral"
+      "service": "positive"
     }
   },
   {
@@ -797,16 +823,16 @@
       "app_experience"
     ],
     "aspect_sentiments": {
-      "app_experience": "negative"
+      "app_experience": "neutral"
     }
   },
   {
     "review_id": "331",
     "aspects": [
-      "general"
+      "none"
     ],
     "aspect_sentiments": {
-      "general": "positive"
+      "none": "neutral"
     }
   },
   {
@@ -825,12 +851,10 @@
   {
     "review_id": "6149",
     "aspects": [
-      "service",
-      "cleanliness"
+      "service"
     ],
     "aspect_sentiments": {
-      "service": "positive",
-      "cleanliness": "positive"
+      "service": "positive"
     }
   },
   {
@@ -854,12 +878,14 @@
   {
     "review_id": "6473",
     "aspects": [
-      "app_experience",
-      "general"
+      "service",
+      "delivery",
+      "app_experience"
     ],
     "aspect_sentiments": {
-      "app_experience": "positive",
-      "general": "positive"
+      "service": "positive",
+      "delivery": "positive",
+      "app_experience": "positive"
     }
   },
   {
@@ -890,7 +916,7 @@
       "app_experience"
     ],
     "aspect_sentiments": {
-      "app_experience": "positive"
+      "app_experience": "negative"
     }
   },
   {
@@ -916,11 +942,13 @@
     "aspects": [
       "food",
       "service",
+      "cleanliness",
       "ambiance"
     ],
     "aspect_sentiments": {
       "food": "positive",
       "service": "positive",
+      "cleanliness": "negative",
       "ambiance": "positive"
     }
   },
@@ -936,9 +964,11 @@
   {
     "review_id": "2255",
     "aspects": [
+      "food",
       "service"
     ],
     "aspect_sentiments": {
+      "food": "positive",
       "service": "positive"
     }
   },
@@ -967,19 +997,21 @@
   {
     "review_id": "9522",
     "aspects": [
-      "app_experience"
+      "general"
     ],
     "aspect_sentiments": {
-      "app_experience": "positive"
+      "general": "positive"
     }
   },
   {
     "review_id": "5064",
     "aspects": [
-      "service"
+      "service",
+      "cleanliness"
     ],
     "aspect_sentiments": {
-      "service": "positive"
+      "service": "positive",
+      "cleanliness": "positive"
     }
   },
   {
@@ -1020,10 +1052,14 @@
   {
     "review_id": "3800",
     "aspects": [
-      "food"
+      "food",
+      "service",
+      "ambiance"
     ],
     "aspect_sentiments": {
-      "food": "positive"
+      "food": "positive",
+      "service": "positive",
+      "ambiance": "positive"
     }
   },
   {
@@ -1031,14 +1067,12 @@
     "aspects": [
       "service",
       "price",
-      "cleanliness",
-      "ambiance"
+      "cleanliness"
     ],
     "aspect_sentiments": {
       "service": "negative",
       "price": "negative",
-      "cleanliness": "negative",
-      "ambiance": "negative"
+      "cleanliness": "negative"
     }
   },
   {
@@ -1053,18 +1087,24 @@
   {
     "review_id": "1176",
     "aspects": [
+      "food",
       "service"
     ],
     "aspect_sentiments": {
+      "food": "positive",
       "service": "positive"
     }
   },
   {
     "review_id": "5357",
     "aspects": [
+      "food",
+      "service",
       "ambiance"
     ],
     "aspect_sentiments": {
+      "food": "positive",
+      "service": "positive",
       "ambiance": "positive"
     }
   },
@@ -1072,11 +1112,13 @@
     "review_id": "4245",
     "aspects": [
       "service",
-      "price"
+      "price",
+      "ambiance"
     ],
     "aspect_sentiments": {
       "service": "positive",
-      "price": "positive"
+      "price": "positive",
+      "ambiance": "positive"
     }
   },
   {
@@ -1106,21 +1148,25 @@
   {
     "review_id": "3238",
     "aspects": [
+      "service",
       "price",
+      "cleanliness",
       "ambiance"
     ],
     "aspect_sentiments": {
+      "service": "positive",
       "price": "negative",
-      "ambiance": "negative"
+      "cleanliness": "negative",
+      "ambiance": "positive"
     }
   },
   {
     "review_id": "5375",
     "aspects": [
-      "general"
+      "service"
     ],
     "aspect_sentiments": {
-      "general": "negative"
+      "service": "negative"
     }
   },
   {
@@ -1129,7 +1175,7 @@
       "service"
     ],
     "aspect_sentiments": {
-      "service": "negative"
+      "service": "positive"
     }
   },
   {
@@ -1146,10 +1192,10 @@
   {
     "review_id": "8517",
     "aspects": [
-      "app_experience"
+      "general"
     ],
     "aspect_sentiments": {
-      "app_experience": "negative"
+      "general": "negative"
     }
   },
   {
@@ -1164,10 +1210,12 @@
   {
     "review_id": "7569",
     "aspects": [
-      "price"
+      "price",
+      "app_experience"
     ],
     "aspect_sentiments": {
-      "price": "positive"
+      "price": "positive",
+      "app_experience": "positive"
     }
   },
   {
@@ -1192,11 +1240,13 @@
     "review_id": "4670",
     "aspects": [
       "service",
-      "cleanliness"
+      "cleanliness",
+      "ambiance"
     ],
     "aspect_sentiments": {
       "service": "positive",
-      "cleanliness": "positive"
+      "cleanliness": "positive",
+      "ambiance": "positive"
     }
   },
   {
@@ -1211,24 +1261,6 @@
   {
     "review_id": "5063",
     "aspects": [
-      "service"
-    ],
-    "aspect_sentiments": {
-      "service": "positive"
-    }
-  },
-  {
-    "review_id": "515",
-    "aspects": [
-      "food"
-    ],
-    "aspect_sentiments": {
-      "food": "negative"
-    }
-  },
-  {
-    "review_id": "3751",
-    "aspects": [
       "service",
       "ambiance"
     ],
@@ -1238,12 +1270,36 @@
     }
   },
   {
-    "review_id": "929",
+    "review_id": "515",
     "aspects": [
-      "general"
+      "food",
+      "service"
     ],
     "aspect_sentiments": {
-      "general": "positive"
+      "food": "negative",
+      "service": "negative"
+    }
+  },
+  {
+    "review_id": "3751",
+    "aspects": [
+      "food",
+      "service",
+      "ambiance"
+    ],
+    "aspect_sentiments": {
+      "food": "positive",
+      "service": "positive",
+      "ambiance": "positive"
+    }
+  },
+  {
+    "review_id": "929",
+    "aspects": [
+      "service"
+    ],
+    "aspect_sentiments": {
+      "service": "positive"
     }
   },
   {
@@ -1252,16 +1308,16 @@
       "app_experience"
     ],
     "aspect_sentiments": {
-      "app_experience": "negative"
+      "app_experience": "positive"
     }
   },
   {
     "review_id": "1206",
     "aspects": [
-      "ambiance"
+      "service"
     ],
     "aspect_sentiments": {
-      "ambiance": "negative"
+      "service": "negative"
     }
   },
   {
@@ -1292,36 +1348,34 @@
     "review_id": "2601",
     "aspects": [
       "food",
-      "service",
-      "price"
+      "service"
     ],
     "aspect_sentiments": {
       "food": "neutral",
-      "service": "positive",
-      "price": "negative"
+      "service": "positive"
     }
   },
   {
     "review_id": "4507",
     "aspects": [
       "food",
-      "service",
-      "cleanliness"
+      "service"
     ],
     "aspect_sentiments": {
       "food": "negative",
-      "service": "negative",
-      "cleanliness": "negative"
+      "service": "negative"
     }
   },
   {
     "review_id": "1865",
     "aspects": [
+      "food",
       "service",
       "price",
       "ambiance"
     ],
     "aspect_sentiments": {
+      "food": "positive",
       "service": "positive",
       "price": "positive",
       "ambiance": "positive"
@@ -1443,10 +1497,12 @@
   {
     "review_id": "866",
     "aspects": [
-      "service"
+      "service",
+      "ambiance"
     ],
     "aspect_sentiments": {
-      "service": "positive"
+      "service": "positive",
+      "ambiance": "positive"
     }
   },
   {
@@ -1461,10 +1517,10 @@
   {
     "review_id": "7013",
     "aspects": [
-      "app_experience"
+      "general"
     ],
     "aspect_sentiments": {
-      "app_experience": "negative"
+      "general": "positive"
     }
   },
   {
@@ -1481,10 +1537,10 @@
   {
     "review_id": "5107",
     "aspects": [
-      "general"
+      "food"
     ],
     "aspect_sentiments": {
-      "general": "positive"
+      "food": "positive"
     }
   },
   {
@@ -1502,7 +1558,7 @@
       "general"
     ],
     "aspect_sentiments": {
-      "general": "positive"
+      "general": "neutral"
     }
   },
   {
@@ -1530,14 +1586,12 @@
   {
     "review_id": "1207",
     "aspects": [
-      "price",
-      "cleanliness",
-      "ambiance"
+      "service",
+      "price"
     ],
     "aspect_sentiments": {
-      "price": "negative",
-      "cleanliness": "negative",
-      "ambiance": "negative"
+      "service": "negative",
+      "price": "negative"
     }
   },
   {
@@ -1605,10 +1659,12 @@
   {
     "review_id": "1127",
     "aspects": [
-      "service"
+      "service",
+      "ambiance"
     ],
     "aspect_sentiments": {
-      "service": "positive"
+      "service": "positive",
+      "ambiance": "positive"
     }
   },
   {
@@ -1658,21 +1714,19 @@
   {
     "review_id": "830",
     "aspects": [
-      "service",
-      "price"
+      "service"
     ],
     "aspect_sentiments": {
-      "service": "negative",
-      "price": "negative"
+      "service": "negative"
     }
   },
   {
     "review_id": "5225",
     "aspects": [
-      "general"
+      "none"
     ],
     "aspect_sentiments": {
-      "general": "positive"
+      "none": "neutral"
     }
   },
   {
@@ -1716,10 +1770,14 @@
   {
     "review_id": "3773",
     "aspects": [
-      "general"
+      "service",
+      "cleanliness",
+      "ambiance"
     ],
     "aspect_sentiments": {
-      "general": "positive"
+      "service": "positive",
+      "cleanliness": "negative",
+      "ambiance": "positive"
     }
   },
   {
@@ -1734,10 +1792,10 @@
   {
     "review_id": "5773",
     "aspects": [
-      "general"
+      "service"
     ],
     "aspect_sentiments": {
-      "general": "positive"
+      "service": "positive"
     }
   },
   {
@@ -1754,10 +1812,12 @@
   {
     "review_id": "4647",
     "aspects": [
-      "food"
+      "food",
+      "service"
     ],
     "aspect_sentiments": {
-      "food": "negative"
+      "food": "negative",
+      "service": "negative"
     }
   },
   {
@@ -1843,10 +1903,10 @@
   {
     "review_id": "7645",
     "aspects": [
-      "general"
+      "none"
     ],
     "aspect_sentiments": {
-      "general": "positive"
+      "none": "neutral"
     }
   },
   {
@@ -1854,11 +1914,13 @@
     "aspects": [
       "food",
       "service",
+      "price",
       "ambiance"
     ],
     "aspect_sentiments": {
       "food": "positive",
       "service": "positive",
+      "price": "positive",
       "ambiance": "positive"
     }
   },
@@ -1906,10 +1968,10 @@
   {
     "review_id": "5292",
     "aspects": [
-      "general"
+      "none"
     ],
     "aspect_sentiments": {
-      "general": "positive"
+      "none": "neutral"
     }
   },
   {
@@ -1944,10 +2006,10 @@
   {
     "review_id": "7504",
     "aspects": [
-      "general"
+      "none"
     ],
     "aspect_sentiments": {
-      "general": "positive"
+      "none": "neutral"
     }
   },
   {
@@ -1971,12 +2033,10 @@
   {
     "review_id": "4414",
     "aspects": [
-      "service",
-      "ambiance"
+      "service"
     ],
     "aspect_sentiments": {
-      "service": "positive",
-      "ambiance": "positive"
+      "service": "positive"
     }
   },
   {
@@ -1995,10 +2055,12 @@
   {
     "review_id": "5404",
     "aspects": [
-      "service"
+      "service",
+      "cleanliness"
     ],
     "aspect_sentiments": {
-      "service": "positive"
+      "service": "positive",
+      "cleanliness": "positive"
     }
   },
   {
@@ -2052,10 +2114,10 @@
   {
     "review_id": "5108",
     "aspects": [
-      "service"
+      "general"
     ],
     "aspect_sentiments": {
-      "service": "positive"
+      "general": "positive"
     }
   },
   {
@@ -2081,10 +2143,12 @@
   {
     "review_id": "2277",
     "aspects": [
-      "food"
+      "food",
+      "service"
     ],
     "aspect_sentiments": {
-      "food": "positive"
+      "food": "positive",
+      "service": "positive"
     }
   },
   {
@@ -2108,19 +2172,19 @@
   {
     "review_id": "820",
     "aspects": [
-      "food"
+      "general"
     ],
     "aspect_sentiments": {
-      "food": "positive"
+      "general": "positive"
     }
   },
   {
     "review_id": "5417",
     "aspects": [
-      "service"
+      "general"
     ],
     "aspect_sentiments": {
-      "service": "positive"
+      "general": "positive"
     }
   },
   {
@@ -2129,7 +2193,7 @@
       "general"
     ],
     "aspect_sentiments": {
-      "general": "positive"
+      "general": "negative"
     }
   },
   {
@@ -2147,15 +2211,17 @@
       "app_experience"
     ],
     "aspect_sentiments": {
-      "app_experience": "negative"
+      "app_experience": "neutral"
     }
   },
   {
     "review_id": "1139",
     "aspects": [
+      "food",
       "service"
     ],
     "aspect_sentiments": {
+      "food": "positive",
       "service": "positive"
     }
   },
@@ -2173,12 +2239,10 @@
   {
     "review_id": "5835",
     "aspects": [
-      "service",
-      "delivery"
+      "service"
     ],
     "aspect_sentiments": {
-      "service": "negative",
-      "delivery": "negative"
+      "service": "negative"
     }
   },
   {
@@ -2186,11 +2250,13 @@
     "aspects": [
       "service",
       "price",
+      "cleanliness",
       "app_experience"
     ],
     "aspect_sentiments": {
       "service": "negative",
       "price": "negative",
+      "cleanliness": "negative",
       "app_experience": "negative"
     }
   },
@@ -2219,10 +2285,12 @@
   {
     "review_id": "5509",
     "aspects": [
-      "general"
+      "food",
+      "service"
     ],
     "aspect_sentiments": {
-      "general": "neutral"
+      "food": "neutral",
+      "service": "positive"
     }
   },
   {
@@ -2284,11 +2352,13 @@
   {
     "review_id": "7112",
     "aspects": [
+      "service",
       "price",
       "delivery",
       "app_experience"
     ],
     "aspect_sentiments": {
+      "service": "negative",
       "price": "negative",
       "delivery": "negative",
       "app_experience": "negative"
@@ -2298,20 +2368,24 @@
     "review_id": "2775",
     "aspects": [
       "food",
+      "service",
       "price"
     ],
     "aspect_sentiments": {
       "food": "negative",
+      "service": "negative",
       "price": "negative"
     }
   },
   {
     "review_id": "3252",
     "aspects": [
-      "food"
+      "food",
+      "service"
     ],
     "aspect_sentiments": {
-      "food": "positive"
+      "food": "positive",
+      "service": "positive"
     }
   },
   {
@@ -2328,11 +2402,13 @@
     "aspects": [
       "service",
       "price",
+      "delivery",
       "app_experience"
     ],
     "aspect_sentiments": {
       "service": "negative",
       "price": "negative",
+      "delivery": "negative",
       "app_experience": "negative"
     }
   },
@@ -2361,10 +2437,12 @@
   {
     "review_id": "2044",
     "aspects": [
-      "service"
+      "service",
+      "ambiance"
     ],
     "aspect_sentiments": {
-      "service": "positive"
+      "service": "positive",
+      "ambiance": "positive"
     }
   },
   {
@@ -2380,38 +2458,48 @@
     "review_id": "5646",
     "aspects": [
       "service",
+      "price",
+      "cleanliness",
       "ambiance"
     ],
     "aspect_sentiments": {
       "service": "negative",
+      "price": "negative",
+      "cleanliness": "negative",
       "ambiance": "negative"
     }
   },
   {
     "review_id": "4523",
     "aspects": [
-      "general"
+      "service"
     ],
     "aspect_sentiments": {
-      "general": "positive"
+      "service": "negative"
     }
   },
   {
     "review_id": "6762",
     "aspects": [
+      "service",
       "app_experience"
     ],
     "aspect_sentiments": {
+      "service": "negative",
       "app_experience": "negative"
     }
   },
   {
     "review_id": "5381",
     "aspects": [
-      "general"
+      "service",
+      "price",
+      "ambiance"
     ],
     "aspect_sentiments": {
-      "general": "positive"
+      "service": "positive",
+      "price": "positive",
+      "ambiance": "positive"
     }
   },
   {
@@ -2428,9 +2516,11 @@
   {
     "review_id": "8231",
     "aspects": [
+      "service",
       "app_experience"
     ],
     "aspect_sentiments": {
+      "service": "negative",
       "app_experience": "negative"
     }
   },
@@ -2440,7 +2530,7 @@
       "app_experience"
     ],
     "aspect_sentiments": {
-      "app_experience": "negative"
+      "app_experience": "positive"
     }
   },
   {
@@ -2475,13 +2565,11 @@
     "aspects": [
       "food",
       "service",
-      "price",
       "delivery"
     ],
     "aspect_sentiments": {
       "food": "negative",
       "service": "negative",
-      "price": "negative",
       "delivery": "negative"
     }
   },
@@ -2491,15 +2579,17 @@
       "general"
     ],
     "aspect_sentiments": {
-      "general": "positive"
+      "general": "negative"
     }
   },
   {
     "review_id": "2012",
     "aspects": [
+      "food",
       "service"
     ],
     "aspect_sentiments": {
+      "food": "negative",
       "service": "negative"
     }
   },
@@ -2507,10 +2597,12 @@
     "review_id": "2192",
     "aspects": [
       "food",
+      "service",
       "ambiance"
     ],
     "aspect_sentiments": {
-      "food": "negative",
+      "food": "positive",
+      "service": "negative",
       "ambiance": "negative"
     }
   },
@@ -2518,10 +2610,12 @@
     "review_id": "2824",
     "aspects": [
       "food",
+      "service",
       "price"
     ],
     "aspect_sentiments": {
       "food": "negative",
+      "service": "negative",
       "price": "negative"
     }
   },
@@ -2561,23 +2655,25 @@
     "aspects": [
       "food",
       "service",
-      "cleanliness"
+      "price",
+      "cleanliness",
+      "ambiance"
     ],
     "aspect_sentiments": {
       "food": "positive",
       "service": "positive",
-      "cleanliness": "positive"
+      "price": "positive",
+      "cleanliness": "positive",
+      "ambiance": "positive"
     }
   },
   {
     "review_id": "5900",
     "aspects": [
-      "service",
-      "cleanliness"
+      "service"
     ],
     "aspect_sentiments": {
-      "service": "positive",
-      "cleanliness": "positive"
+      "service": "positive"
     }
   },
   {
@@ -2586,16 +2682,18 @@
       "general"
     ],
     "aspect_sentiments": {
-      "general": "positive"
+      "general": "negative"
     }
   },
   {
     "review_id": "3961",
     "aspects": [
-      "service"
+      "service",
+      "cleanliness"
     ],
     "aspect_sentiments": {
-      "service": "positive"
+      "service": "positive",
+      "cleanliness": "positive"
     }
   },
   {
@@ -2611,11 +2709,13 @@
     "review_id": "6312",
     "aspects": [
       "service",
+      "price",
       "delivery",
       "app_experience"
     ],
     "aspect_sentiments": {
       "service": "negative",
+      "price": "negative",
       "delivery": "negative",
       "app_experience": "negative"
     }
@@ -2674,10 +2774,10 @@
   {
     "review_id": "1921",
     "aspects": [
-      "service"
+      "general"
     ],
     "aspect_sentiments": {
-      "service": "positive"
+      "general": "positive"
     }
   },
   {
@@ -2687,8 +2787,8 @@
       "ambiance"
     ],
     "aspect_sentiments": {
-      "service": "negative",
-      "ambiance": "negative"
+      "service": "positive",
+      "ambiance": "positive"
     }
   },
   {
@@ -2774,7 +2874,7 @@
       "general"
     ],
     "aspect_sentiments": {
-      "general": "positive"
+      "general": "neutral"
     }
   },
   {
@@ -2814,7 +2914,7 @@
       "general"
     ],
     "aspect_sentiments": {
-      "general": "positive"
+      "general": "negative"
     }
   },
   {
@@ -2842,12 +2942,10 @@
   {
     "review_id": "6749",
     "aspects": [
-      "price",
-      "app_experience"
+      "price"
     ],
     "aspect_sentiments": {
-      "price": "negative",
-      "app_experience": "negative"
+      "price": "negative"
     }
   },
   {
@@ -2862,10 +2960,10 @@
   {
     "review_id": "7448",
     "aspects": [
-      "app_experience"
+      "general"
     ],
     "aspect_sentiments": {
-      "app_experience": "negative"
+      "general": "negative"
     }
   },
   {
@@ -2885,18 +2983,20 @@
       "ambiance"
     ],
     "aspect_sentiments": {
-      "ambiance": "positive"
+      "ambiance": "negative"
     }
   },
   {
     "review_id": "1083",
     "aspects": [
       "food",
-      "service"
+      "service",
+      "ambiance"
     ],
     "aspect_sentiments": {
-      "food": "negative",
-      "service": "negative"
+      "food": "positive",
+      "service": "negative",
+      "ambiance": "positive"
     }
   },
   {
@@ -2913,25 +3013,21 @@
     "aspects": [
       "food",
       "service",
-      "price",
       "delivery"
     ],
     "aspect_sentiments": {
-      "food": "negative",
+      "food": "positive",
       "service": "negative",
-      "price": "negative",
       "delivery": "negative"
     }
   },
   {
     "review_id": "1836",
     "aspects": [
-      "service",
-      "cleanliness"
+      "service"
     ],
     "aspect_sentiments": {
-      "service": "positive",
-      "cleanliness": "positive"
+      "service": "positive"
     }
   },
   {
@@ -2947,12 +3043,10 @@
     "review_id": "6038",
     "aspects": [
       "service",
-      "price",
       "ambiance"
     ],
     "aspect_sentiments": {
       "service": "negative",
-      "price": "negative",
       "ambiance": "negative"
     }
   },
@@ -2970,11 +3064,9 @@
   {
     "review_id": "1539",
     "aspects": [
-      "food",
       "service"
     ],
     "aspect_sentiments": {
-      "food": "negative",
       "service": "negative"
     }
   },
@@ -3001,10 +3093,14 @@
   {
     "review_id": "418",
     "aspects": [
-      "price"
+      "service",
+      "price",
+      "ambiance"
     ],
     "aspect_sentiments": {
-      "price": "negative"
+      "service": "positive",
+      "price": "negative",
+      "ambiance": "positive"
     }
   },
   {
@@ -3111,18 +3207,20 @@
       "food"
     ],
     "aspect_sentiments": {
-      "food": "negative"
+      "food": "neutral"
     }
   },
   {
     "review_id": "7931",
     "aspects": [
       "service",
+      "price",
       "delivery",
       "app_experience"
     ],
     "aspect_sentiments": {
       "service": "negative",
+      "price": "negative",
       "delivery": "negative",
       "app_experience": "negative"
     }
@@ -3135,18 +3233,20 @@
     ],
     "aspect_sentiments": {
       "service": "negative",
-      "price": "negative"
+      "price": "neutral"
     }
   },
   {
     "review_id": "7686",
     "aspects": [
       "service",
+      "price",
       "delivery",
       "app_experience"
     ],
     "aspect_sentiments": {
       "service": "negative",
+      "price": "negative",
       "delivery": "negative",
       "app_experience": "negative"
     }
@@ -3164,21 +3264,25 @@
     "review_id": "4599",
     "aspects": [
       "service",
-      "cleanliness"
+      "cleanliness",
+      "ambiance"
     ],
     "aspect_sentiments": {
       "service": "positive",
-      "cleanliness": "positive"
+      "cleanliness": "positive",
+      "ambiance": "positive"
     }
   },
   {
     "review_id": "1300",
     "aspects": [
       "service",
+      "price",
       "ambiance"
     ],
     "aspect_sentiments": {
       "service": "negative",
+      "price": "negative",
       "ambiance": "negative"
     }
   },
@@ -3207,11 +3311,13 @@
     "aspects": [
       "service",
       "price",
+      "delivery",
       "app_experience"
     ],
     "aspect_sentiments": {
       "service": "negative",
       "price": "negative",
+      "delivery": "negative",
       "app_experience": "negative"
     }
   },
@@ -3219,10 +3325,12 @@
     "review_id": "6824",
     "aspects": [
       "service",
+      "price",
       "app_experience"
     ],
     "aspect_sentiments": {
       "service": "negative",
+      "price": "negative",
       "app_experience": "negative"
     }
   },
@@ -3251,11 +3359,9 @@
   {
     "review_id": "8978",
     "aspects": [
-      "app_experience",
       "general"
     ],
     "aspect_sentiments": {
-      "app_experience": "positive",
       "general": "positive"
     }
   },
@@ -3309,11 +3415,13 @@
     "review_id": "6306",
     "aspects": [
       "service",
+      "price",
       "delivery",
       "app_experience"
     ],
     "aspect_sentiments": {
       "service": "negative",
+      "price": "negative",
       "delivery": "negative",
       "app_experience": "negative"
     }
@@ -3343,12 +3451,10 @@
   {
     "review_id": "4183",
     "aspects": [
-      "service",
-      "ambiance"
+      "service"
     ],
     "aspect_sentiments": {
-      "service": "positive",
-      "ambiance": "positive"
+      "service": "positive"
     }
   },
   {
@@ -3372,10 +3478,14 @@
   {
     "review_id": "725",
     "aspects": [
-      "food"
+      "food",
+      "service",
+      "cleanliness"
     ],
     "aspect_sentiments": {
-      "food": "negative"
+      "food": "negative",
+      "service": "negative",
+      "cleanliness": "negative"
     }
   },
   {
@@ -3399,21 +3509,23 @@
   {
     "review_id": "4605",
     "aspects": [
-      "service"
+      "service",
+      "cleanliness",
+      "ambiance"
     ],
     "aspect_sentiments": {
-      "service": "positive"
+      "service": "positive",
+      "cleanliness": "positive",
+      "ambiance": "positive"
     }
   },
   {
     "review_id": "4088",
     "aspects": [
-      "service",
-      "price"
+      "service"
     ],
     "aspect_sentiments": {
-      "service": "negative",
-      "price": "negative"
+      "service": "negative"
     }
   },
   {
@@ -3451,7 +3563,7 @@
       "food"
     ],
     "aspect_sentiments": {
-      "food": "negative"
+      "food": "neutral"
     }
   },
   {
@@ -3492,10 +3604,12 @@
   {
     "review_id": "7695",
     "aspects": [
-      "app_experience"
+      "service",
+      "delivery"
     ],
     "aspect_sentiments": {
-      "app_experience": "negative"
+      "service": "negative",
+      "delivery": "negative"
     }
   },
   {
@@ -3510,21 +3624,25 @@
   {
     "review_id": "8944",
     "aspects": [
-      "none"
+      "general"
     ],
     "aspect_sentiments": {
-      "none": "neutral"
+      "general": "negative"
     }
   },
   {
     "review_id": "2659",
     "aspects": [
+      "food",
       "service",
-      "price"
+      "price",
+      "cleanliness"
     ],
     "aspect_sentiments": {
+      "food": "negative",
       "service": "negative",
-      "price": "negative"
+      "price": "negative",
+      "cleanliness": "negative"
     }
   },
   {
@@ -3562,20 +3680,24 @@
     "review_id": "412",
     "aspects": [
       "food",
+      "service",
       "price"
     ],
     "aspect_sentiments": {
       "food": "positive",
+      "service": "positive",
       "price": "positive"
     }
   },
   {
     "review_id": "1906",
     "aspects": [
-      "general"
+      "food",
+      "service"
     ],
     "aspect_sentiments": {
-      "general": "positive"
+      "food": "positive",
+      "service": "positive"
     }
   },
   {
@@ -3584,7 +3706,7 @@
       "general"
     ],
     "aspect_sentiments": {
-      "general": "positive"
+      "general": "negative"
     }
   },
   {
@@ -3599,8 +3721,8 @@
     "aspect_sentiments": {
       "food": "positive",
       "service": "positive",
-      "price": "positive",
-      "cleanliness": "positive",
+      "price": "negative",
+      "cleanliness": "negative",
       "ambiance": "positive"
     }
   },
@@ -3610,36 +3732,40 @@
       "service"
     ],
     "aspect_sentiments": {
-      "service": "negative"
+      "service": "positive"
     }
   },
   {
     "review_id": "7304",
     "aspects": [
-      "general"
+      "price"
     ],
     "aspect_sentiments": {
-      "general": "positive"
+      "price": "positive"
     }
   },
   {
     "review_id": "5501",
     "aspects": [
       "food",
+      "service",
       "price"
     ],
     "aspect_sentiments": {
       "food": "positive",
+      "service": "positive",
       "price": "positive"
     }
   },
   {
     "review_id": "3422",
     "aspects": [
-      "general"
+      "service",
+      "ambiance"
     ],
     "aspect_sentiments": {
-      "general": "negative"
+      "service": "positive",
+      "ambiance": "positive"
     }
   },
   {
@@ -3654,10 +3780,12 @@
   {
     "review_id": "614",
     "aspects": [
+      "food",
       "service",
       "ambiance"
     ],
     "aspect_sentiments": {
+      "food": "positive",
       "service": "positive",
       "ambiance": "positive"
     }
@@ -3696,9 +3824,15 @@
   {
     "review_id": "6483",
     "aspects": [
+      "service",
+      "price",
+      "delivery",
       "app_experience"
     ],
     "aspect_sentiments": {
+      "service": "negative",
+      "price": "negative",
+      "delivery": "negative",
       "app_experience": "negative"
     }
   },
@@ -3717,14 +3851,16 @@
     "review_id": "2784",
     "aspects": [
       "food",
+      "service",
       "price",
       "cleanliness",
       "ambiance"
     ],
     "aspect_sentiments": {
       "food": "positive",
-      "price": "positive",
-      "cleanliness": "positive",
+      "service": "positive",
+      "price": "negative",
+      "cleanliness": "negative",
       "ambiance": "positive"
     }
   },
@@ -3732,11 +3868,13 @@
     "review_id": "7841",
     "aspects": [
       "service",
+      "price",
       "delivery",
       "app_experience"
     ],
     "aspect_sentiments": {
       "service": "negative",
+      "price": "negative",
       "delivery": "negative",
       "app_experience": "negative"
     }
@@ -3754,11 +3892,13 @@
     "review_id": "6257",
     "aspects": [
       "service",
+      "price",
       "delivery",
       "app_experience"
     ],
     "aspect_sentiments": {
       "service": "negative",
+      "price": "negative",
       "delivery": "negative",
       "app_experience": "negative"
     }
@@ -3837,10 +3977,12 @@
   {
     "review_id": "2609",
     "aspects": [
-      "price"
+      "food",
+      "service"
     ],
     "aspect_sentiments": {
-      "price": "positive"
+      "food": "positive",
+      "service": "positive"
     }
   },
   {
@@ -3873,11 +4015,13 @@
   {
     "review_id": "7428",
     "aspects": [
+      "service",
       "price",
       "delivery",
       "app_experience"
     ],
     "aspect_sentiments": {
+      "service": "negative",
       "price": "negative",
       "delivery": "negative",
       "app_experience": "negative"
@@ -3929,18 +4073,18 @@
       "app_experience"
     ],
     "aspect_sentiments": {
-      "app_experience": "negative"
+      "app_experience": "positive"
     }
   },
   {
     "review_id": "1628",
     "aspects": [
-      "service",
-      "price"
+      "food",
+      "service"
     ],
     "aspect_sentiments": {
-      "service": "negative",
-      "price": "negative"
+      "food": "negative",
+      "service": "negative"
     }
   },
   {
@@ -3965,12 +4109,10 @@
     "review_id": "5156",
     "aspects": [
       "service",
-      "cleanliness",
       "ambiance"
     ],
     "aspect_sentiments": {
       "service": "positive",
-      "cleanliness": "positive",
       "ambiance": "positive"
     }
   },
@@ -4018,7 +4160,7 @@
       "app_experience"
     ],
     "aspect_sentiments": {
-      "app_experience": "negative"
+      "app_experience": "positive"
     }
   },
   {
@@ -4173,7 +4315,7 @@
     ],
     "aspect_sentiments": {
       "service": "positive",
-      "cleanliness": "positive"
+      "cleanliness": "negative"
     }
   },
   {
@@ -4206,7 +4348,7 @@
       "app_experience"
     ],
     "aspect_sentiments": {
-      "app_experience": "negative"
+      "app_experience": "positive"
     }
   },
   {
@@ -4241,9 +4383,11 @@
   {
     "review_id": "1352",
     "aspects": [
+      "food",
       "service"
     ],
     "aspect_sentiments": {
+      "food": "positive",
       "service": "positive"
     }
   },
@@ -4259,12 +4403,10 @@
   {
     "review_id": "4379",
     "aspects": [
-      "service",
-      "cleanliness"
+      "service"
     ],
     "aspect_sentiments": {
-      "service": "positive",
-      "cleanliness": "positive"
+      "service": "positive"
     }
   },
   {
@@ -4299,10 +4441,12 @@
   {
     "review_id": "6607",
     "aspects": [
+      "service",
       "price",
       "app_experience"
     ],
     "aspect_sentiments": {
+      "service": "negative",
       "price": "negative",
       "app_experience": "negative"
     }
@@ -4320,10 +4464,12 @@
     "review_id": "1834",
     "aspects": [
       "service",
+      "price",
       "cleanliness"
     ],
     "aspect_sentiments": {
       "service": "negative",
+      "price": "negative",
       "cleanliness": "negative"
     }
   },
@@ -4350,19 +4496,25 @@
   {
     "review_id": "6203",
     "aspects": [
-      "service"
+      "service",
+      "cleanliness"
     ],
     "aspect_sentiments": {
-      "service": "positive"
+      "service": "positive",
+      "cleanliness": "positive"
     }
   },
   {
     "review_id": "7943",
     "aspects": [
+      "service",
+      "price",
       "delivery",
       "app_experience"
     ],
     "aspect_sentiments": {
+      "service": "negative",
+      "price": "negative",
       "delivery": "negative",
       "app_experience": "negative"
     }
@@ -4381,12 +4533,14 @@
     "aspects": [
       "food",
       "service",
-      "price"
+      "price",
+      "cleanliness"
     ],
     "aspect_sentiments": {
       "food": "negative",
       "service": "negative",
-      "price": "negative"
+      "price": "negative",
+      "cleanliness": "negative"
     }
   },
   {
@@ -4491,10 +4645,12 @@
   {
     "review_id": "9535",
     "aspects": [
-      "service"
+      "service",
+      "app_experience"
     ],
     "aspect_sentiments": {
-      "service": "positive"
+      "service": "positive",
+      "app_experience": "positive"
     }
   },
   {
@@ -4521,11 +4677,13 @@
     "review_id": "6655",
     "aspects": [
       "service",
+      "price",
       "delivery",
       "app_experience"
     ],
     "aspect_sentiments": {
       "service": "negative",
+      "price": "negative",
       "delivery": "negative",
       "app_experience": "negative"
     }
@@ -4544,10 +4702,12 @@
   {
     "review_id": "5443",
     "aspects": [
+      "food",
       "service",
       "ambiance"
     ],
     "aspect_sentiments": {
+      "food": "positive",
       "service": "positive",
       "ambiance": "positive"
     }
@@ -4568,7 +4728,7 @@
       "service"
     ],
     "aspect_sentiments": {
-      "food": "negative",
+      "food": "neutral",
       "service": "negative"
     }
   },
@@ -4612,20 +4772,26 @@
     "aspects": [
       "food",
       "service",
-      "price"
+      "price",
+      "cleanliness",
+      "ambiance"
     ],
     "aspect_sentiments": {
       "food": "negative",
       "service": "negative",
-      "price": "negative"
+      "price": "negative",
+      "cleanliness": "negative",
+      "ambiance": "negative"
     }
   },
   {
     "review_id": "564",
     "aspects": [
+      "food",
       "service"
     ],
     "aspect_sentiments": {
+      "food": "negative",
       "service": "negative"
     }
   },
@@ -4669,9 +4835,11 @@
   {
     "review_id": "3348",
     "aspects": [
+      "service",
       "price"
     ],
     "aspect_sentiments": {
+      "service": "positive",
       "price": "negative"
     }
   },
@@ -4701,11 +4869,13 @@
     "review_id": "6014",
     "aspects": [
       "food",
+      "service",
       "price"
     ],
     "aspect_sentiments": {
       "food": "positive",
-      "price": "negative"
+      "service": "positive",
+      "price": "positive"
     }
   },
   {
@@ -4724,19 +4894,23 @@
   {
     "review_id": "2829",
     "aspects": [
+      "service",
       "ambiance"
     ],
     "aspect_sentiments": {
+      "service": "negative",
       "ambiance": "positive"
     }
   },
   {
     "review_id": "7310",
     "aspects": [
+      "service",
       "delivery",
       "app_experience"
     ],
     "aspect_sentiments": {
+      "service": "negative",
       "delivery": "negative",
       "app_experience": "negative"
     }
@@ -4762,21 +4936,25 @@
   {
     "review_id": "2030",
     "aspects": [
-      "food"
+      "food",
+      "service"
     ],
     "aspect_sentiments": {
-      "food": "negative"
+      "food": "negative",
+      "service": "negative"
     }
   },
   {
     "review_id": "5176",
     "aspects": [
       "service",
-      "cleanliness"
+      "cleanliness",
+      "ambiance"
     ],
     "aspect_sentiments": {
       "service": "positive",
-      "cleanliness": "positive"
+      "cleanliness": "positive",
+      "ambiance": "positive"
     }
   },
   {
@@ -4796,7 +4974,7 @@
     ],
     "aspect_sentiments": {
       "price": "negative",
-      "app_experience": "negative"
+      "app_experience": "positive"
     }
   },
   {
@@ -4816,13 +4994,15 @@
       "food",
       "service",
       "price",
-      "cleanliness"
+      "cleanliness",
+      "ambiance"
     ],
     "aspect_sentiments": {
       "food": "negative",
       "service": "negative",
       "price": "negative",
-      "cleanliness": "negative"
+      "cleanliness": "negative",
+      "ambiance": "negative"
     }
   },
   {
@@ -4841,10 +5021,10 @@
   {
     "review_id": "6799",
     "aspects": [
-      "general"
+      "service"
     ],
     "aspect_sentiments": {
-      "general": "positive"
+      "service": "negative"
     }
   },
   {
@@ -4862,7 +5042,7 @@
       "app_experience"
     ],
     "aspect_sentiments": {
-      "app_experience": "negative"
+      "app_experience": "positive"
     }
   },
   {
@@ -4888,10 +5068,12 @@
   {
     "review_id": "3763",
     "aspects": [
-      "service"
+      "service",
+      "ambiance"
     ],
     "aspect_sentiments": {
-      "service": "negative"
+      "service": "negative",
+      "ambiance": "negative"
     }
   },
   {
@@ -4934,13 +5116,11 @@
     "review_id": "7702",
     "aspects": [
       "price",
-      "delivery",
-      "app_experience"
+      "delivery"
     ],
     "aspect_sentiments": {
       "price": "negative",
-      "delivery": "negative",
-      "app_experience": "negative"
+      "delivery": "negative"
     }
   },
   {
@@ -4966,9 +5146,11 @@
   {
     "review_id": "7265",
     "aspects": [
+      "delivery",
       "app_experience"
     ],
     "aspect_sentiments": {
+      "delivery": "negative",
       "app_experience": "negative"
     }
   },
@@ -4978,7 +5160,7 @@
       "app_experience"
     ],
     "aspect_sentiments": {
-      "app_experience": "negative"
+      "app_experience": "positive"
     }
   },
   {
@@ -5036,36 +5218,38 @@
       "app_experience"
     ],
     "aspect_sentiments": {
-      "service": "positive",
-      "app_experience": "negative"
+      "service": "negative",
+      "app_experience": "positive"
     }
   },
   {
     "review_id": "427",
     "aspects": [
-      "general"
+      "service"
     ],
     "aspect_sentiments": {
-      "general": "positive"
+      "service": "positive"
     }
   },
   {
     "review_id": "7462",
     "aspects": [
-      "general"
+      "none"
     ],
     "aspect_sentiments": {
-      "general": "positive"
+      "none": "neutral"
     }
   },
   {
     "review_id": "2112",
     "aspects": [
       "service",
+      "price",
       "ambiance"
     ],
     "aspect_sentiments": {
       "service": "positive",
+      "price": "positive",
       "ambiance": "positive"
     }
   },
@@ -5073,35 +5257,31 @@
     "review_id": "9977",
     "aspects": [
       "service",
-      "price",
       "app_experience"
     ],
     "aspect_sentiments": {
       "service": "negative",
-      "price": "negative",
       "app_experience": "negative"
     }
   },
   {
     "review_id": "4371",
     "aspects": [
-      "service",
-      "price"
+      "service"
     ],
     "aspect_sentiments": {
-      "service": "negative",
-      "price": "negative"
+      "service": "negative"
     }
   },
   {
     "review_id": "7684",
     "aspects": [
-      "delivery",
-      "app_experience"
+      "service",
+      "delivery"
     ],
     "aspect_sentiments": {
-      "delivery": "negative",
-      "app_experience": "negative"
+      "service": "negative",
+      "delivery": "negative"
     }
   },
   {
@@ -5147,12 +5327,10 @@
   {
     "review_id": "9593",
     "aspects": [
-      "app_experience",
-      "general"
+      "app_experience"
     ],
     "aspect_sentiments": {
-      "app_experience": "negative",
-      "general": "positive"
+      "app_experience": "positive"
     }
   },
   {
@@ -5167,10 +5345,10 @@
   {
     "review_id": "2120",
     "aspects": [
-      "general"
+      "service"
     ],
     "aspect_sentiments": {
-      "general": "positive"
+      "service": "positive"
     }
   }
 ]
