@@ -1,0 +1,2 @@
+"""Arabic ABSA package."""
+
