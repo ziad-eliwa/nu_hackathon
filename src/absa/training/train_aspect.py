@@ -8,7 +8,7 @@ import numpy as np
 from sklearn.metrics import f1_score
 
 from absa.config.settings import ArtifactPaths, DataPaths
-from absa.config.taxonomy import ASPECTS
+from absa.config.taxonomy import ASPECT_TAXONOMY as ASPECTS
 from absa.data.io import load_labeled_reviews
 from absa.data.schemas import LabeledReviewRecord
 from absa.models.aspect_api import AspectEnsemblePredictor
@@ -187,7 +187,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
 
 def main() -> None:
     parser = build_arg_parser()
-    args = parser.parse_args()
+    args, _ = parser.parse_known_args()
     payload = train_path_a(
         train_csv=args.train_csv,
         validation_csv=args.validation_csv,

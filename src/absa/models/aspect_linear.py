@@ -8,7 +8,7 @@ import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.multiclass import OneVsRestClassifier
 
-from absa.config.taxonomy import ASPECTS
+from absa.config.taxonomy import ASPECT_TAXONOMY as ASPECTS
 from absa.data.schemas import ReviewRecord
 from absa.features.tfidf import TfidfFeatureExtractor
 from absa.preprocess.metadata import record_to_metadata

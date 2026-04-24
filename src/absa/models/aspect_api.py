@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 from typing import Sequence
 
-from absa.config.taxonomy import ASPECTS
+from absa.config.taxonomy import ASPECT_TAXONOMY as ASPECTS
 from absa.data.schemas import ReviewRecord
 from absa.models.aspect_linear import AspectLinearModel
 from absa.models.aspect_transformer import AspectTransformerModel

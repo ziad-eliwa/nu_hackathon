@@ -12,7 +12,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import SGDClassifier
 from sklearn.multiclass import OneVsRestClassifier
 
-from absa.config.taxonomy import ASPECTS
+from absa.config.taxonomy import ASPECT_TAXONOMY as ASPECTS
 from absa.data.schemas import ReviewRecord
 from absa.preprocess.metadata import record_to_metadata
 from absa.preprocess.normalize import normalize_text

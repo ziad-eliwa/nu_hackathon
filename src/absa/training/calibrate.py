@@ -7,7 +7,7 @@ from pathlib import Path
 import numpy as np
 from sklearn.metrics import f1_score
 
-from absa.config.taxonomy import ASPECTS, ordered_aspects
+from absa.config.taxonomy import ASPECT_TAXONOMY as ASPECTS, ordered_aspects
 
 
 def optimize_aspect_thresholds(
