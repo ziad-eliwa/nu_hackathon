@@ -1,2 +1,0 @@
-# nu_hackathon
-Hello 
